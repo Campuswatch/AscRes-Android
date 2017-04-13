@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="#00ffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:orientation="vertical"
+        android:background="@drawable/info_window_background">
+
+        <TextView
+            android:id="@+id/incident_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".9"
+            android:textSize="14sp"
+            android:padding="8dp"
+            android:paddingTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center"
+            android:background="@drawable/cw_gradient"/>
+
+        <TextView
+            android:id="@+id/incident_time_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.25"
+            android:layout_margin="1dp"
+            android:background="#00ffffff"
+            android:padding="5dp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout android:layout_height="10dp" android:orientation="vertical"
+        android:layout_width="match_parent" android:background="#00ffffff">
+
+        <ImageView
+            android:src="@drawable/triangle3x"
+            android:layout_width="30dp"
+            android:background="#00ffffff"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:foregroundGravity="top"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:minWidth="350dp"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    android:gravity="center_horizontal"
+    android:padding="30dp"
+    tools:context="com.campuswatch.ascres_android.map.UserUpdateFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/cw_update_scheme">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="3dp">
+
+            <ImageView
+                android:id="@+id/user_update_image"
+                android:clickable="true"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_full"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_edit_image"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="85dp"
+                android:layout_marginLeft="85dp"
+                />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/update_profile_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update profile"
+            android:gravity="center_horizontal|top"
+            android:textSize="20sp"
+            android:textAllCaps="true"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="#d6ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+
+        <EditText
+            android:id="@+id/name_update_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/midnight"
+            android:inputType="textPersonName"
+            android:layout_margin="5dp"
+            android:hint="Name"/>
+
+        <EditText
+            android:id="@+id/phone_update_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/midnight"
+            android:layout_margin="5dp"
+            android:inputType="phone"
+            android:hint="Phone #"/>
+
+        <EditText
+            android:id="@+id/email_update_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/midnight"
+            android:layout_margin="5dp"
+            android:hint="Email"/>
+
+        <Button
+            android:id="@+id/update_fragment_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/off_white"
+            android:background="@color/colorPrimary"
+            android:text="OK"/>
+    </LinearLayout>
+
+</LinearLayout>

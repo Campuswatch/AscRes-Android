@@ -1,0 +1,109 @@
+{
+  "project_info": {
+    "project_number": "985357666838",
+    "firebase_url": "https://project-2238530286034503391.firebaseio.com",
+    "project_id": "project-2238530286034503391",
+    "storage_bucket": "project-2238530286034503391.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985357666838:android:c7fca753ed7ae94f",
+        "android_client_info": {
+          "package_name": "net.campuswatch.campuswatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985357666838-gqe9ffttof816jl5fi3fsr47d5gh1jjn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.campuswatch.campuswatch",
+            "certificate_hash": "ae0473079349c49757ed5f72589da451c1733d74"
+          }
+        },
+        {
+          "client_id": "985357666838-gtmc7rv91mn0sup1asem96p6rfvu7k5h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.campuswatch.campuswatch",
+            "certificate_hash": "5f730672d475e9d6de99a9be565ed80d44f3cf04"
+          }
+        },
+        {
+          "client_id": "985357666838-kl53o6sdepdbv625pd3lj2jpqq95qevv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL0bhQqjz1SC6NbBIPrqgElFhIC2E95uA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985357666838:android:673b4ae1383b9c65",
+        "android_client_info": {
+          "package_name": "com.campuswatch.ascres_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985357666838-n2m89v93oobnocrp2rnoguikeevd6lql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campuswatch.ascres_android",
+            "certificate_hash": "5f730672d475e9d6de99a9be565ed80d44f3cf04"
+          }
+        },
+        {
+          "client_id": "985357666838-kl53o6sdepdbv625pd3lj2jpqq95qevv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL0bhQqjz1SC6NbBIPrqgElFhIC2E95uA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985357666838-kl53o6sdepdbv625pd3lj2jpqq95qevv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "985357666838-fu884lk6tl5husq0g759qtd1dts5p3jd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.campuswatch.dispatch"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
