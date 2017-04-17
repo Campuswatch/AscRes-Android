@@ -1,4 +1,4 @@
-package com.campuswatch.ascres_android.signup;
+package com.campuswatch.ascres_android.login;
 
 import android.content.Intent;
 import android.os.Bundle;

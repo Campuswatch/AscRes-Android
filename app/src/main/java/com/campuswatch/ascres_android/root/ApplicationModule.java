@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.campuswatch.ascres_android.UserRepository;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -44,15 +42,8 @@ public class ApplicationModule {
     @Provides
     @Singleton
     GoogleApiClient providesGoogleApiClient(Context context) {
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestIdToken("985357666838-kl53o6sdepdbv625pd3lj2jpqq95qevv.apps.googleusercontent.com")
-                .build();
-
         return new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
 

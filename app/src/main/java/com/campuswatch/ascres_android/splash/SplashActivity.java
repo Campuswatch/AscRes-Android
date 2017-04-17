@@ -17,10 +17,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.campuswatch.ascres_android.UserRepository;
+import com.campuswatch.ascres_android.login.LoginActivity;
 import com.campuswatch.ascres_android.map.MapsActivity;
 import com.campuswatch.ascres_android.models.User;
 import com.campuswatch.ascres_android.root.App;
-import com.campuswatch.ascres_android.signup.SignUpActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -31,6 +31,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Inject;
 
@@ -53,18 +54,49 @@ public class SplashActivity extends AppCompatActivity implements
     @Inject
     UserRepository repo;
 
-    private LocationSettingsRequest locationSettingsRequest;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ((App) getApplication()).getComponent().inject(this);
-        locationSettingsRequest = buildLocationRequest();
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // User is signed in
+            } else {
+                // User is signed out
+            }
+        };
+
         initializeClient();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterClientCallbacks();
+        super.onDestroy();
+    }
+
     private void checkLocationSettings() {
+
+        LocationSettingsRequest locationSettingsRequest = buildLocationRequest();
 
         PendingResult<LocationSettingsResult> pendingResult =
                 LocationServices.SettingsApi.checkLocationSettings(client,
@@ -128,11 +160,9 @@ public class SplashActivity extends AppCompatActivity implements
         if (isLoggedIn()) {
             loadUserFromPrefs();
             startActivity(new Intent(SplashActivity.this, MapsActivity.class));
-            unregisterClientCallbacks();
             finish();
         } else {
-            startActivity(new Intent(SplashActivity.this, SignUpActivity.class));
-            unregisterClientCallbacks();
+            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             finish();
         }
     }

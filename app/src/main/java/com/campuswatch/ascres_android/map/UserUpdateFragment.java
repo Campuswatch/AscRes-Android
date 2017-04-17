@@ -78,7 +78,7 @@ public class UserUpdateFragment extends DialogFragment {
                 .bitmapTransform(new ImageTransform(this.getContext()))
                 .into(imageEdit);
 
-        if (!user.getPhone().equals(UPDATE_PHONE)) {
+        if (!user.getPhone().equals("")) {
             phoneEdit.setText(user.getPhone());
         }
 

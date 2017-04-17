@@ -1,16 +1,15 @@
 package com.campuswatch.ascres_android.map;
 
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
-import com.campuswatch.ascres_android.utils.DateUtil;
 import com.campuswatch.ascres_android.UserRepository;
 import com.campuswatch.ascres_android.models.Alert;
 import com.campuswatch.ascres_android.models.Report;
 import com.campuswatch.ascres_android.models.User;
+import com.campuswatch.ascres_android.utils.DateUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,10 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static com.campuswatch.ascres_android.Constants.USER_DATA;
-import static com.campuswatch.ascres_android.utils.DateUtil.isExpired;
 import static com.campuswatch.ascres_android.UserRepository.alertID;
 import static com.campuswatch.ascres_android.UserRepository.isEmergency;
+import static com.campuswatch.ascres_android.utils.DateUtil.isExpired;
 
 /**
  * Thought of by samwyz for the most part on 4/13/17.
@@ -57,7 +55,7 @@ class MapsPresenter implements
 
     @Override
     public void sendReport(LatLng latLng, int category) {
-        Report report = new Report(latLng.latitude, latLng.longitude, repo.getUser().getCampus(),
+        Report report = new Report(latLng.latitude, latLng.longitude, 0,
                 DateUtil.getTimeInMillis(), category, repo.getUser().getUid());
         model.sendReportFirebase(report);
     }
@@ -67,10 +65,10 @@ class MapsPresenter implements
         alertID = UUID.randomUUID().toString();
 
         model.getAlertReference()
-                .child(String.valueOf(repo.getUser().getCampus()))
+                .child(String.valueOf(0))
                 .child(alertID)
                 .setValue(new Alert(repo.getUser().getUid(), location.getLatitude(),
-                        location.getLongitude(), repo.getUser().getCampus(),
+                        location.getLongitude(), 0,
                         DateUtil.getTimeInMillis(), false, true))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -88,7 +86,7 @@ class MapsPresenter implements
     @Override
     public void setAlertListener() {
         DatabaseReference ref = model.getAlertReference()
-                .child(String.valueOf(repo.getUser().getCampus()))
+                .child(String.valueOf(0))
                 .child(alertID);
 
         ref.child("emergency").addValueEventListener(emergencyValueListener);
@@ -97,7 +95,7 @@ class MapsPresenter implements
 
     @Override
     public void onMapReady() {
-        if (repo.getUser().getPhone().equals(UPDATE_PHONE)) {
+        if (repo.getUser().getPhone().equals("")) {
             view.showUpdatePhoneDialog();
         } view.setUserDrawer(repo.getUser());
     }
@@ -108,7 +106,7 @@ class MapsPresenter implements
         map.put("lat", location.getLatitude());
         map.put("lon", location.getLongitude());
         model.getAlertReference()
-                .child(String.valueOf(repo.getUser().getCampus()))
+                .child(String.valueOf(0))
                 .child(alertID)
                 .updateChildren(map);
     }
@@ -159,18 +157,16 @@ class MapsPresenter implements
         user.setPhone(phone);
         user.setEmail(email);
         user.setImage(image.toString());
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(USER_DATA, user.serialize());
-        editor.commit();
         repo.setUser(user);
+        repo.saveUserPrefs();
         return user;
     }
 
-    private void setCampusValue(int campus) {
-        repo.getUser().setCampus(campus);
-        model.getReportReference().child(String.valueOf(campus))
-                .addValueEventListener(reportEventListener);
-    }
+//    private void setCampusValue(int campus) {
+//        repo.getUser().setCampus(campus);
+//        model.getReportReference().child(String.valueOf(campus))
+//                .addValueEventListener(reportEventListener);
+//    }
 
     private ValueEventListener reportEventListener = new ValueEventListener() {
         @Override

@@ -10,9 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.campuswatch.ascres_android.utils.DateUtil;
+import com.campuswatch.ascres_android.R;
 import com.campuswatch.ascres_android.models.Chat;
 import com.campuswatch.ascres_android.models.User;
+import com.campuswatch.ascres_android.utils.DateUtil;
 
 /**
  * Thought of by samwyz for the most part on 4/13/17.
@@ -44,10 +45,10 @@ public class ChatHolder extends RecyclerView.ViewHolder {
             Glide.with(context).load(chat.getText()).into(chatImage);
         } else {
             if (chat.getUid().equals(user.getUid())) {
-                chatLayout.setBackground(ContextCompat.getDrawable(R.drawable.chat_bubble_user));
+                chatLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.chat_bubble_user));
                 chatLayout.setGravity(Gravity.END);
             } else {
-                chatLayout.setBackground(ContextCompat.getDrawable(R.drawable.chat_bubble_dispatch));
+                chatLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.chat_bubble_dispatch));
                 chatLayout.setGravity(Gravity.START);
             } messageText.setText(chat.getText());
         }

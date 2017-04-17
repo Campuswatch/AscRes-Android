@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.campuswatch.ascres_android.R;
+import com.campuswatch.ascres_android.chat.ChatActivity;
 import com.campuswatch.ascres_android.models.Report;
 import com.campuswatch.ascres_android.models.User;
 import com.campuswatch.ascres_android.root.App;
@@ -51,7 +52,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -64,13 +64,13 @@ import butterknife.ButterKnife;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.campuswatch.ascres_android.utils.ChooserUtil.incidentChooser;
-import static com.campuswatch.ascres_android.utils.ChooserUtil.spotChooser;
 import static com.campuswatch.ascres_android.Constants.REQUEST_CLIENT_CONNECT;
 import static com.campuswatch.ascres_android.Constants.STORAGE_PERMISSION_REQUEST;
 import static com.campuswatch.ascres_android.Constants.USER_DATA;
-import static com.campuswatch.ascres_android.utils.DateUtil.convertTimestampDateTime;
 import static com.campuswatch.ascres_android.UserRepository.isEmergency;
+import static com.campuswatch.ascres_android.utils.ChooserUtil.incidentChooser;
+import static com.campuswatch.ascres_android.utils.ChooserUtil.spotChooser;
+import static com.campuswatch.ascres_android.utils.DateUtil.convertTimestampDateTime;
 
 public class MapsActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -199,9 +199,9 @@ public class MapsActivity extends AppCompatActivity implements
 
     private void initializeMap(GoogleMap map) {
         if (checkPermission()) {
-            MapStyleOptions style = MapStyleOptions
-                    .loadRawResourceStyle(MapsActivity.this, R.raw.mapstyle);
-            map.setMapStyle(style);
+//            MapStyleOptions style = MapStyleOptions
+//                    .loadRawResourceStyle(MapsActivity.this, R.raw.mapstyle);
+//            map.setMapStyle(style);
             map.getUiSettings().setMapToolbarEnabled(false);
             map.getUiSettings().setIndoorLevelPickerEnabled(false);
             map.setInfoWindowAdapter(new ReportWindowAdapter(this));
@@ -257,7 +257,7 @@ public class MapsActivity extends AppCompatActivity implements
         userPhone.setText(user.getPhone());
         userEmail.setText(user.getEmail());
         Glide.with(this).load(user.getImage())
-                .placeholder(logo_full_resize)
+                .placeholder(R.drawable.logo_full_resize)
                 .bitmapTransform(new ImageTransform(this))
                 .into(userImage);
     }
