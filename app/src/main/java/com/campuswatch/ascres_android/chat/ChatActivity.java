@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.campuswatch.ascres_android.R;
 import com.campuswatch.ascres_android.root.App;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 

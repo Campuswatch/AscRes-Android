@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,13 +29,14 @@ import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_OK;
 import static com.campuswatch.ascres_android.Constants.IMAGE_GALLERY_REQUEST;
-import static com.campuswatch.ascres_android.Constants.USER_DATA;
 
 /**
  * Thought of by samwyz for the most part on 4/13/17.
  */
 
 public class UserUpdateFragment extends DialogFragment {
+
+    private static final String USER_DATA = "user";
 
     @BindView(R.id.user_update_image)
     ImageView imageEdit;
@@ -53,12 +55,29 @@ public class UserUpdateFragment extends DialogFragment {
     Uri imageUri;
     User user;
 
-    public UserUpdateFragment() {}
+    public UserUpdateFragment() {
+        //empty public constructor
+    }
+
+    public static UserUpdateFragment newInstance(String user) {
+        UserUpdateFragment fragment = new UserUpdateFragment();
+        Bundle args = new Bundle();
+        args.putString(USER_DATA, user);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = User.create(getArguments().getString(USER_DATA));
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_update, container, false);
-        user = User.create(getArguments().getString(USER_DATA));
 
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00FFFFFF")));
         WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();

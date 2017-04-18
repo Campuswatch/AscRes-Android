@@ -2,10 +2,8 @@ package com.campuswatch.ascres_android.splash;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,10 +14,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.campuswatch.ascres_android.UserRepository;
 import com.campuswatch.ascres_android.login.LoginActivity;
 import com.campuswatch.ascres_android.map.MapsActivity;
-import com.campuswatch.ascres_android.models.User;
 import com.campuswatch.ascres_android.root.App;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,7 +27,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Inject;
 
@@ -39,7 +34,6 @@ import static com.campuswatch.ascres_android.Constants.LOCATION_PERMISSION_REQUE
 import static com.campuswatch.ascres_android.Constants.REQUEST_CHECK_SETTINGS;
 import static com.campuswatch.ascres_android.Constants.REQUEST_CLIENT_CONNECT;
 import static com.campuswatch.ascres_android.Constants.UPDATE_INTERVAL;
-import static com.campuswatch.ascres_android.Constants.USER_DATA;
 
 /**
  * Thought of by samwyz for the most part on 4/13/17.
@@ -51,11 +45,6 @@ public class SplashActivity extends AppCompatActivity implements
 
     @Inject
     GoogleApiClient client;
-    @Inject
-    UserRepository repo;
-
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,29 +52,7 @@ public class SplashActivity extends AppCompatActivity implements
 
         ((App) getApplication()).getComponent().inject(this);
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                // User is signed in
-            } else {
-                // User is signed out
-            }
-        };
-
         initializeClient();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mAuth.removeAuthStateListener(mAuthListener);
     }
 
     @Override
@@ -95,7 +62,6 @@ public class SplashActivity extends AppCompatActivity implements
     }
 
     private void checkLocationSettings() {
-
         LocationSettingsRequest locationSettingsRequest = buildLocationRequest();
 
         PendingResult<LocationSettingsResult> pendingResult =
@@ -158,20 +124,10 @@ public class SplashActivity extends AppCompatActivity implements
 
     private void permissionComplete() {
         if (isLoggedIn()) {
-            loadUserFromPrefs();
             startActivity(new Intent(SplashActivity.this, MapsActivity.class));
-            finish();
         } else {
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-            finish();
-        }
-    }
-
-    private void loadUserFromPrefs() {
-        SharedPreferences prefs = getSharedPreferences(USER_DATA, Context.MODE_PRIVATE);
-        if (prefs.getString(USER_DATA, null) != null) {
-            repo.setUser(User.create(prefs.getString(USER_DATA, null)));
-        }
+        } finish();
     }
 
     private static LocationSettingsRequest buildLocationRequest() {
@@ -197,7 +153,7 @@ public class SplashActivity extends AppCompatActivity implements
                     e.printStackTrace();
                 } break;
             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                Toast.makeText(SplashActivity.this, "Location settings unavailable",
+                Toast.makeText(SplashActivity.this, "Location unavailable",
                         Toast.LENGTH_LONG).show();
                 finish();
                 break;

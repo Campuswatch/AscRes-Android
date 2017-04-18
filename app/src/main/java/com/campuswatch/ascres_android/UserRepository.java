@@ -4,13 +4,13 @@ import android.content.SharedPreferences;
 
 import com.campuswatch.ascres_android.models.User;
 
-import static com.campuswatch.ascres_android.Constants.USER_DATA;
-
 /**
  * Thought of by samwyz for the most part on 4/12/17.
  */
 
 public class UserRepository {
+
+    private static final String USER_DATA = "user";
 
     public static boolean isEmergency;
     public static String alertID;
@@ -19,23 +19,25 @@ public class UserRepository {
 
     public UserRepository(SharedPreferences prefs) {
         this.prefs = prefs;
+        loadUser();
     }
 
     public void setUser(User user){
         this.user = user;
+        saveUser();
     }
 
     public User getUser(){
         return user;
     }
 
-    public void saveUserPrefs() {
+    private void saveUser() {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(USER_DATA, user.serialize());
         editor.apply();
     }
 
-    public void loadUserPrefs() {
+    private void loadUser() {
         user = User.create(prefs.getString(USER_DATA, null));
     }
 

@@ -1,6 +1,7 @@
 package com.campuswatch.ascres_android.login;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,25 +12,32 @@ import com.campuswatch.ascres_android.R;
 import com.campuswatch.ascres_android.UserRepository;
 import com.campuswatch.ascres_android.models.User;
 import com.campuswatch.ascres_android.root.App;
+import com.campuswatch.ascres_android.splash.SplashActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import javax.inject.Inject;
 
-import static com.campuswatch.ascres_android.Constants.USER_DATA;
-
 public class LoginActivity extends AppCompatActivity implements
         LoginFragment.OnLoginListener,
-        UserPhoneFragment.OnPhoneCompletedListener {
+        UserPhoneFragment.OnPhoneCompletedListener,
+        UserImageFragment.ImageCapturedListener {
+
+    private static final String UID = "uid";
+    private static final String NAME = "name";
+    private static final String EMAIL = "email";
+    private static final String PHONE = "phone";
+    private static final String IMAGE = "image";
 
     @Inject
     UserRepository mRepo;
 
-    private DatabaseReference userRef;
+    private DatabaseReference mUserRef;
+    private StorageReference mImageRef;
     private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
 
     private String mUid;
     private String mName;
@@ -43,26 +51,35 @@ public class LoginActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_login);
 
         ((App) getApplication()).getComponent().inject(this);
-        userRef = FirebaseDatabase.getInstance().getReference("users");
+
+        mUserRef = FirebaseDatabase.getInstance().getReference("users");
+        mImageRef = FirebaseStorage.getInstance().getReference("images");
         mAuth = FirebaseAuth.getInstance();
 
         startTransaction(new LoginFragment());
     }
 
-    private void saveUser() {
-        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-        SharedPreferences prefs = getSharedPreferences(USER_DATA, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        User user = new User(
-                fbUser.getEmail(),
-                fbUser.getDisplayName(),
-                fbUser.getUid(),
-                // TODO// FIXME: 4/17/17
-                null, null);
-        userRef.child(user.getUid()).setValue(user);
-        editor.putString(USER_DATA, user.serialize());
-        editor.apply();
-        mRepo.setUser(user);
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mUid = savedInstanceState.getString(UID);
+        mName = savedInstanceState.getString(NAME);
+        mEmail = savedInstanceState.getString(EMAIL);
+        mPhone = savedInstanceState.getString(PHONE);
+        mImage = savedInstanceState.getString(IMAGE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putString(UID, mUid);
+        outState.putString(NAME, mName);
+        outState.putString(EMAIL, mEmail);
+        outState.putString(PHONE, mPhone);
+        outState.putString(IMAGE, mImage);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -73,12 +90,10 @@ public class LoginActivity extends AppCompatActivity implements
                 return;
             }
 
-            mUser = mAuth.getCurrentUser();
-
-            if (mUser != null) {
-                mUid = mUser.getUid();
-                mName = mUser.getDisplayName();
-                mEmail = mUser.getEmail();
+            if (mAuth.getCurrentUser() != null) {
+                mUid = mAuth.getCurrentUser().getUid();
+                mName = mAuth.getCurrentUser().getDisplayName();
+                mEmail = mAuth.getCurrentUser().getEmail();
             }
 
             startTransaction(new UserPhoneFragment());
@@ -89,6 +104,30 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     public void onPhoneUpdated(String phone) {
         mPhone = phone;
+        startTransaction(new UserImageFragment());
+    }
+
+    @SuppressWarnings("VisibleForTests")
+    @Override
+    public void onImageCaptured(Uri imagePath) {
+        mImageRef.child(mUid).child(mUid).putFile(imagePath).addOnCompleteListener(this, task -> {
+            if (!task.isSuccessful()) {
+                Toast.makeText(LoginActivity.this, "Image upload failed.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (task.getResult().getDownloadUrl() != null) {
+                mImage = task.getResult().getDownloadUrl().toString();
+            }
+
+            User user = new User(mUid, mName, mEmail, mPhone, mImage);
+            mUserRef.child(mUid).setValue(user);
+            mRepo.setUser(user);
+
+            startActivity(new Intent(LoginActivity.this, TutorialActivity.class));
+            finish();
+
+        });
     }
 
     private void startTransaction(Fragment fragment) {

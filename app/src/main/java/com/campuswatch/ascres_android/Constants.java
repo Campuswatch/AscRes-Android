@@ -7,8 +7,6 @@ package com.campuswatch.ascres_android;
 public class Constants {
 
     public static final String APP_TAG = "Ascension-Residential";
-    //user shared preferences
-    public static final String USER_DATA = "user";
     //location update
     public static final long UPDATE_INTERVAL = 500;
     //time in milliseconds

@@ -14,8 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -65,8 +63,6 @@ import butterknife.ButterKnife;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.campuswatch.ascres_android.Constants.REQUEST_CLIENT_CONNECT;
-import static com.campuswatch.ascres_android.Constants.STORAGE_PERMISSION_REQUEST;
-import static com.campuswatch.ascres_android.Constants.USER_DATA;
 import static com.campuswatch.ascres_android.UserRepository.isEmergency;
 import static com.campuswatch.ascres_android.utils.ChooserUtil.incidentChooser;
 import static com.campuswatch.ascres_android.utils.ChooserUtil.spotChooser;
@@ -133,15 +129,6 @@ public class MapsActivity extends AppCompatActivity implements
 
         initializeActionBar();
         registerClientCallbacks();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-        managerCompat.cancelAll();
-        checkStoragePermission();
     }
 
     @Override
@@ -303,52 +290,10 @@ public class MapsActivity extends AppCompatActivity implements
         dialog.show();
     }
 
-    private void checkStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                showSnackbarRationale();
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        STORAGE_PERMISSION_REQUEST);
-            }
-        } else userEditButton.setOnClickListener(v -> userUpdateFragment());
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case STORAGE_PERMISSION_REQUEST:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    userEditButton.setOnClickListener(v -> userUpdateFragment());
-                } else {
-                    showSnackbarRationale();
-                    userEditButton.setOnClickListener(v -> ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_REQUEST));
-                }
-        }
-    }
-
-    private void showSnackbarRationale() {
-        Snackbar.make(findViewById(android.R.id.content),
-                "Storage access required to upload images to dispatch and user profile",
-                Snackbar.LENGTH_INDEFINITE)
-                .setAction("OK", view -> ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        STORAGE_PERMISSION_REQUEST)).show();
-    }
-
     private void userUpdateFragment() {
         closeDrawer();
-        UserUpdateFragment fragment = new UserUpdateFragment();
-        Bundle args = new Bundle();
-        args.putString(USER_DATA, presenter.getUser().serialize());
-        fragment.setArguments(args);
+        UserUpdateFragment fragment = UserUpdateFragment.newInstance(
+                presenter.getUser().serialize());
         fragment.show(getSupportFragmentManager(), "updateFragment");
     }
 
@@ -505,7 +450,8 @@ public class MapsActivity extends AppCompatActivity implements
                 client.connectClient();
                 break;
             default:
-                makeToast("An error occurred.  Please relaunch Campus Watch", Toast.LENGTH_LONG);
+                makeToast("An error occurred.  Please relaunch app", Toast.LENGTH_LONG);
+                finish();
                 break;
         }
     }
