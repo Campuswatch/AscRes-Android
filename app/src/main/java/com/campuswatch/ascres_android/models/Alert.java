@@ -9,18 +9,16 @@ public class Alert {
     private String uid;
     private double lat;
     private double lon;
-    private int campus;
     private long timestamp;
     private boolean isDispatched;
     private boolean isEmergency;
 
     public Alert(){}
 
-    public Alert(String uid, double lat, double lon, int campus, long timestamp, boolean isDispatched, boolean isEmergency) {
+    public Alert(String uid, double lat, double lon, long timestamp, boolean isDispatched, boolean isEmergency) {
         this.uid = uid;
         this.lat = lat;
         this.lon = lon;
-        this.campus = campus;
         this.timestamp = timestamp;
         this.isDispatched = isDispatched;
         this.isEmergency = isEmergency;
@@ -36,10 +34,6 @@ public class Alert {
 
     public double getLon() {
         return lon;
-    }
-
-    public int getCampus() {
-        return campus;
     }
 
     public long getTimestamp() {

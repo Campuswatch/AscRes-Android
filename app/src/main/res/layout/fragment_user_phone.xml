@@ -10,12 +10,14 @@
         android:id="@+id/phone_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"/>
+        android:layout_centerVertical="true"
+        android:inputType="phone" />
 
     <Button
         android:id="@+id/phone_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/phone_et"
         android:text="@string/phone_ok"/>
 
 </RelativeLayout>

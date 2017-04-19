@@ -12,8 +12,6 @@ public class UserRepository {
 
     private static final String USER_DATA = "user";
 
-    public static boolean isEmergency;
-    public static String alertID;
     private SharedPreferences prefs;
     private User user;
 

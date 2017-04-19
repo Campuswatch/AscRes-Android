@@ -1,19 +1,22 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     tools:context="com.campuswatch.ascres_android.login.UserImageFragment">
 
     <TextView
         android:id="@+id/image_info_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:text="@string/image_info"/>
 
     <Button
         android:id="@+id/image_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/image_info_tv"
         android:text="@string/image_capture"/>
 
-</FrameLayout>
+</RelativeLayout>

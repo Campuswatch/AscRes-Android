@@ -12,7 +12,6 @@ import com.campuswatch.ascres_android.R;
 import com.campuswatch.ascres_android.UserRepository;
 import com.campuswatch.ascres_android.models.User;
 import com.campuswatch.ascres_android.root.App;
-import com.campuswatch.ascres_android.splash.SplashActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

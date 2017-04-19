@@ -20,7 +20,6 @@ public interface MapsActivityMVP {
 
     interface View
     {
-        void showUpdatePhoneDialog();
         void makeSnackbar(String msg, int length);
         void makeToast(String msg, int length);
         void animateMapLocation(Location location);
@@ -40,7 +39,6 @@ public interface MapsActivityMVP {
         void setView(View view);
         void setAlertListener();
         void startAlerts();
-        void onMapReady();
         void setEmergencyLocation(Location location);
         void setLatestLocation(Location location);
         User getUser();
@@ -66,5 +64,7 @@ public interface MapsActivityMVP {
         void connectClient();
         void disconnectClient();
         void requestLocationUpdates();
+        void subscribeToLocationUpdates();
+        void unsubscribeToLocationUpdates();
     }
 }

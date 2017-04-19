@@ -34,7 +34,7 @@ public class MapsModel implements MapsActivityMVP.Model {
 
     @Override
     public void sendReportFirebase(Report report) {
-        reportRef.child(String.valueOf(report.getCampus())).push().setValue(report);
+        reportRef.push().setValue(report);
     }
 
     @Override

@@ -49,7 +49,7 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_image, container, false);
-        ButterKnife.bind(v);
+        ButterKnife.bind(this, v);
         return v;
     }
 

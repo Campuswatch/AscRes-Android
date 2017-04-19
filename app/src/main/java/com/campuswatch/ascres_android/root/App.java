@@ -2,6 +2,9 @@ package com.campuswatch.ascres_android.root;
 
 import android.app.Application;
 
+import com.campuswatch.ascres_android.chat.ChatModule;
+import com.campuswatch.ascres_android.map.MapsModule;
+
 /**
  * Thought of by samwyz for the most part on 4/12/17.
  */
@@ -23,5 +26,5 @@ public class App extends Application {
 
     public ApplicationComponent getComponent() {
         return component;
-    } {
+    }
 }

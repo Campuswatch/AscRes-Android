@@ -11,7 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import static com.campuswatch.ascres_android.UserRepository.alertID;
+import static com.campuswatch.ascres_android.map.MapsActivity.ALERT_ID;
 
 /**
  * Thought of by samwyz for the most part on 4/13/17.
@@ -39,7 +39,7 @@ class ChatPresenter implements ChatActivityMVP.Presenter {
         adapter = getAdapter();
         view.setChatAdapterAndManager(adapter);
         model.getChatReference().child(String.valueOf(0))
-                .child(alertID).addValueEventListener(new ValueEventListener() {
+                .child(ALERT_ID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 view.smoothScroll(dataSnapshot.getChildrenCount());
@@ -52,11 +52,10 @@ class ChatPresenter implements ChatActivityMVP.Presenter {
 
     @Override
     public void sendMessage(String message) {
-        if (alertID != null) {
+        if (ALERT_ID != null) {
             Chat chat = new Chat(repo.getUser().getUid(), message,
-                    DateUtil.getTimeInMillis(), alertID, false);
-            model.getChatReference().child(String.valueOf(0))
-                    .child(alertID)
+                    DateUtil.getTimeInMillis(), ALERT_ID, false);
+            model.getChatReference().child(ALERT_ID)
                     .push().setValue(chat);
         } else {
             view.makeToast("Your alert has been resolved");
@@ -67,15 +66,14 @@ class ChatPresenter implements ChatActivityMVP.Presenter {
     @Override
     public void sendImage(Uri image) {
         model.getImageReference().child(repo.getUser().getUid())
-                .child(alertID)
+                .child(ALERT_ID)
                 .child(image.getLastPathSegment())
                 .putFile(image).addOnSuccessListener(taskSnapshot -> {
 
             Chat chat = new Chat(repo.getUser().getUid(), taskSnapshot.getDownloadUrl().toString(),
-                    DateUtil.getTimeInMillis(), alertID, true);
+                    DateUtil.getTimeInMillis(), ALERT_ID, true);
 
-            model.getChatReference().child(String.valueOf(0))
-                    .child(alertID)
+            model.getChatReference().child(ALERT_ID)
                     .push().setValue(chat);
 
             view.smoothScroll(adapter.getItemCount());
@@ -91,8 +89,7 @@ class ChatPresenter implements ChatActivityMVP.Presenter {
         return new FirebaseRecyclerAdapter<Chat, ChatHolder>
                 (Chat.class, R.layout.chat_message, ChatHolder.class,
                         model.getChatReference()
-                                .child(String.valueOf(0))
-                                .child(alertID)) {
+                                .child(ALERT_ID)) {
             @Override
             protected void populateViewHolder(ChatHolder viewHolder, Chat chat, int position) {
                 viewHolder.setMessage(chat, repo.getUser());

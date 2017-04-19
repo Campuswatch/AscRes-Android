@@ -42,4 +42,24 @@ public class Chat {
     public boolean getIsImage() {
         return isImage;
     }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setAlert(String alert) {
+        this.alert = alert;
+    }
+
+    public void setImage(boolean image) {
+        isImage = image;
+    }
 }

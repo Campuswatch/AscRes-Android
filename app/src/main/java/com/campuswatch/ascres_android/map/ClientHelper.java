@@ -9,11 +9,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
 import static com.campuswatch.ascres_android.Constants.UPDATE_INTERVAL;
-import static com.campuswatch.ascres_android.UserRepository.isEmergency;
+import static com.campuswatch.ascres_android.map.MapsActivity.IS_EMERGENCY;
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 
 /**
@@ -24,11 +25,12 @@ class ClientHelper implements MapsActivityMVP.Client, LocationListener {
 
     private MapsActivityMVP.Presenter presenter;
     private GoogleApiClient client;
-    private final PublishSubject<Location> locationPublisher = PublishSubject.create();
+    private PublishSubject<Location> locationPublisher;
+    private Disposable locationDisposable;
 
     ClientHelper(MapsActivityMVP.Presenter presenter) {
         this.presenter = presenter;
-        locationPublisher.subscribe(locationConsumer);
+        this.locationPublisher = PublishSubject.create();
     }
 
     @Override
@@ -63,6 +65,18 @@ class ClientHelper implements MapsActivityMVP.Client, LocationListener {
         }
     }
 
+    @Override
+    public void subscribeToLocationUpdates() {
+        locationDisposable = locationPublisher.subscribe(locationConsumer);
+    }
+
+    @Override
+    public void unsubscribeToLocationUpdates() {
+        if (locationDisposable != null){
+            locationDisposable.dispose();
+        }
+    }
+
     private static LocationRequest buildLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(UPDATE_INTERVAL);
@@ -80,7 +94,7 @@ class ClientHelper implements MapsActivityMVP.Client, LocationListener {
         @Override
         public void accept(Location location) throws Exception {
             presenter.setLatestLocation(location);
-            if (isEmergency) {
+            if (IS_EMERGENCY) {
                 presenter.setEmergencyLocation(location);
             }
         }

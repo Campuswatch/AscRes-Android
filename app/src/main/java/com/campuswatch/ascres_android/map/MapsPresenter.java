@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static com.campuswatch.ascres_android.UserRepository.alertID;
-import static com.campuswatch.ascres_android.UserRepository.isEmergency;
+import static com.campuswatch.ascres_android.map.MapsActivity.ALERT_ID;
+import static com.campuswatch.ascres_android.map.MapsActivity.IS_EMERGENCY;
 import static com.campuswatch.ascres_android.utils.DateUtil.isExpired;
 
 /**
@@ -37,8 +37,7 @@ class MapsPresenter implements
     private UserRepository repo;
     private Location location;
 
-    MapsPresenter(MapsActivityMVP.Model model,
-                  UserRepository repo) {
+    MapsPresenter(MapsActivityMVP.Model model, UserRepository repo) {
         this.model = model;
         this.repo = repo;
     }
@@ -46,6 +45,7 @@ class MapsPresenter implements
     @Override
     public void setView(MapsActivityMVP.View view) {
         this.view = view;
+        this.view.setUserDrawer(repo.getUser());
     }
 
     @Override
@@ -55,24 +55,23 @@ class MapsPresenter implements
 
     @Override
     public void sendReport(LatLng latLng, int category) {
-        Report report = new Report(latLng.latitude, latLng.longitude, 0,
+        Report report = new Report(latLng.latitude, latLng.longitude,
                 DateUtil.getTimeInMillis(), category, repo.getUser().getUid());
         model.sendReportFirebase(report);
     }
 
     @Override
     public void startAlerts() {
-        alertID = UUID.randomUUID().toString();
+        ALERT_ID = UUID.randomUUID().toString();
 
         model.getAlertReference()
-                .child(String.valueOf(0))
-                .child(alertID)
+                .child(ALERT_ID)
                 .setValue(new Alert(repo.getUser().getUid(), location.getLatitude(),
-                        location.getLongitude(), 0,
+                        location.getLongitude(),
                         DateUtil.getTimeInMillis(), false, true))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        isEmergency = true;
+                        IS_EMERGENCY = true;
                         view.showChatFab();
                         view.hideHelpButton();
                         setAlertListener();
@@ -86,18 +85,10 @@ class MapsPresenter implements
     @Override
     public void setAlertListener() {
         DatabaseReference ref = model.getAlertReference()
-                .child(String.valueOf(0))
-                .child(alertID);
+                .child(ALERT_ID);
 
         ref.child("emergency").addValueEventListener(emergencyValueListener);
         ref.child("dispatched").addValueEventListener(dispatchedValueListener);
-    }
-
-    @Override
-    public void onMapReady() {
-        if (repo.getUser().getPhone().equals("")) {
-            view.showUpdatePhoneDialog();
-        } view.setUserDrawer(repo.getUser());
     }
 
     @Override
@@ -106,8 +97,7 @@ class MapsPresenter implements
         map.put("lat", location.getLatitude());
         map.put("lon", location.getLongitude());
         model.getAlertReference()
-                .child(String.valueOf(0))
-                .child(alertID)
+                .child(ALERT_ID)
                 .updateChildren(map);
     }
 
@@ -158,7 +148,6 @@ class MapsPresenter implements
         user.setEmail(email);
         user.setImage(image.toString());
         repo.setUser(user);
-        repo.saveUserPrefs();
         return user;
     }
 
@@ -194,8 +183,8 @@ class MapsPresenter implements
         {
             if (dataSnapshot.getValue(Boolean.class) != null) {
                 if (!dataSnapshot.getValue(Boolean.class)) {
-                    isEmergency = false;
-                    alertID = null;
+                    IS_EMERGENCY = false;
+                    ALERT_ID = null;
                     view.showHelpButton();
                     view.setHelpButton(false);
                     view.hideChatFab();

@@ -32,7 +32,7 @@
 
         </fragment>
 
-        <net.campuswatch.campuswatch.views.CircularProgressBar
+        <com.campuswatch.ascres_android.views.CircularProgressBar
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/help_map_button"
             android:layout_width="150dp"
@@ -45,8 +45,7 @@
             app:border_width="3dp"
             app:center_circle_diameter="1"
             app:progress_color="@color/colorPrimary"
-            app:progress_startAngle="270"
-            android:visibility="gone"/>
+            app:progress_startAngle="270" />
 
         <ImageView
             android:id="@+id/help_flame"
@@ -57,8 +56,7 @@
             android:layout_marginBottom="25dp"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
-            tools:ignore="ContentDescription"
-            android:visibility="gone"/>
+            tools:ignore="ContentDescription" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/chat_fab"
@@ -67,8 +65,7 @@
             app:backgroundTint="@color/colorPrimary"
             android:layout_gravity="bottom|end"
             android:src="@drawable/chat_word"
-            android:layout_margin="20dp"
-            android:visibility="gone"/>
+            android:layout_margin="20dp" />
 
     </FrameLayout>
 
@@ -101,7 +98,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="10dp">
 
-                    <TextView
+                    <com.campuswatch.ascres_android.views.SamuelsMediumTextView
                         android:id="@+id/user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -110,14 +107,14 @@
                         android:layout_marginBottom="5dp"
                         android:textSize="22sp"/>
 
-                    <TextView
+                    <com.campuswatch.ascres_android.views.SamuelsMediumTextView
                         android:id="@+id/user_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/off_white"
                         android:textSize="17sp"/>
 
-                    <TextView
+                    <com.campuswatch.ascres_android.views.SamuelsMediumTextView
                         android:id="@+id/user_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

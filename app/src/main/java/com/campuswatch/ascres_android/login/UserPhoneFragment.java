@@ -36,7 +36,7 @@ public class UserPhoneFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_phone, container, false);
-        ButterKnife.bind(v);
+        ButterKnife.bind(this, v);
         return v;
     }
 

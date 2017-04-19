@@ -16,7 +16,7 @@
         android:layout_height="150dp"
         android:src="@drawable/logo_full"/>
 
-    <TextView
+    <com.campuswatch.ascres_android.views.SamuelsMediumTextView
         android:id="@+id/report_text6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         android:orientation="vertical"
         android:background="@drawable/report_window_background">
 
-    <TextView
+    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
         android:tag="0"
         android:id="@+id/report_text1"
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
         android:textSize="20sp"
         android:clickable="true"/>
 
-    <TextView
+    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
         android:tag="1"
         android:id="@+id/report_text2"
         android:layout_width="match_parent"
@@ -58,7 +58,7 @@
         android:textSize="20sp"
         android:clickable="true"/>
 
-    <TextView
+    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
         android:tag="2"
         android:id="@+id/report_text3"
         android:layout_width="match_parent"
@@ -70,7 +70,7 @@
         android:textSize="20sp"
         android:clickable="true"/>
 
-    <TextView
+    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
         android:tag="3"
         android:id="@+id/report_text4"
         android:layout_width="match_parent"
@@ -82,7 +82,7 @@
         android:textSize="20sp"
         android:clickable="true"/>
 
-    <TextView
+    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
         android:tag="4"
         android:id="@+id/report_text5"
         android:layout_width="match_parent"

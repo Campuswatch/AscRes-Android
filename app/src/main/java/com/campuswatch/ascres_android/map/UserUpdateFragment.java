@@ -116,7 +116,12 @@ public class UserUpdateFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (UserUpdateFragment.UserUpdateListener) context;
+        if (context instanceof UserUpdateListener) {
+            listener = (UserUpdateListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnLoginListener");
+        }
     }
 
     private View.OnClickListener updateButtonListener = new View.OnClickListener() {

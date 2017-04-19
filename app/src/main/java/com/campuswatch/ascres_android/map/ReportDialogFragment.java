@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +22,10 @@ import butterknife.ButterKnife;
  * Thought of by samwyz for the most part on 4/13/17.
  */
 
-public class ReportDialogFragment extends DialogFragment {
+public class ReportDialogFragment extends DialogFragment implements View.OnClickListener {
     //popped when make report button is pressed to indicate what type of incident is being reported
+
+    private static final String LAT_LNG = "latlng";
 
     @BindView(R.id.report_text1)
     TextView text1;
@@ -36,17 +37,33 @@ public class ReportDialogFragment extends DialogFragment {
     TextView text4;
     @BindView(R.id.report_text5)
     TextView text5;
-    @BindView(R.id.report_text6)
-    TextView text6;
 
     NoticeDialogListener mListener;
     LatLng latlng;
 
-    @Nullable
+    public ReportDialogFragment() {
+
+    }
+
+    public static ReportDialogFragment newInstance(LatLng latLng) {
+        ReportDialogFragment fragment = new ReportDialogFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(LAT_LNG, latLng);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            latlng = getArguments().getParcelable(LAT_LNG);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        latlng = getArguments().getParcelable("location");
         View view = inflater.inflate(R.layout.fragment_report, container, false);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00FFFFFF")));
         WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
@@ -55,11 +72,11 @@ public class ReportDialogFragment extends DialogFragment {
 
         ButterKnife.bind(this, view);
 
-        text1.setOnClickListener(reportListener);
-        text2.setOnClickListener(reportListener);
-        text3.setOnClickListener(reportListener);
-        text4.setOnClickListener(reportListener);
-        text5.setOnClickListener(reportListener);
+        text1.setOnClickListener(this);
+        text2.setOnClickListener(this);
+        text3.setOnClickListener(this);
+        text4.setOnClickListener(this);
+        text5.setOnClickListener(this);
 
         return view;
     }
@@ -73,18 +90,22 @@ public class ReportDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mListener = (NoticeDialogListener) context;
+        if (context instanceof NoticeDialogListener) {
+            mListener = (NoticeDialogListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnLoginListener");
+        }
     }
 
-    View.OnClickListener reportListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mListener.onDialogClick(ReportDialogFragment.this, Integer.valueOf(String.valueOf(v.getTag())), latlng);
-            dismiss();
-        }
-    };
+    @Override
+    public void onClick(View v) {
+        mListener.onDialogClick(ReportDialogFragment.this,
+                Integer.valueOf(String.valueOf(v.getTag())), latlng);
+        dismiss();
+    }
 
-    public interface NoticeDialogListener {
+    interface NoticeDialogListener {
         void onDialogClick(DialogFragment dialog, int category, LatLng latlng);
     }
 }

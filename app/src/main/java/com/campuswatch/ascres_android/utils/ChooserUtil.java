@@ -1,5 +1,7 @@
 package com.campuswatch.ascres_android.utils;
 
+import com.campuswatch.ascres_android.R;
+
 import static com.campuswatch.ascres_android.Constants.REPORT_ASSAULT;
 import static com.campuswatch.ascres_android.Constants.REPORT_HARASSMENT;
 import static com.campuswatch.ascres_android.Constants.REPORT_SUSPICIOUS;

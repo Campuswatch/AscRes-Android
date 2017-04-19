@@ -17,7 +17,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -63,7 +62,6 @@ import butterknife.ButterKnife;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.campuswatch.ascres_android.Constants.REQUEST_CLIENT_CONNECT;
-import static com.campuswatch.ascres_android.UserRepository.isEmergency;
 import static com.campuswatch.ascres_android.utils.ChooserUtil.incidentChooser;
 import static com.campuswatch.ascres_android.utils.ChooserUtil.spotChooser;
 import static com.campuswatch.ascres_android.utils.DateUtil.convertTimestampDateTime;
@@ -76,6 +74,9 @@ public class MapsActivity extends AppCompatActivity implements
         GoogleMap.OnMapLongClickListener,
         MapsActivityMVP.View,
         OnMapReadyCallback {
+
+    public static boolean IS_EMERGENCY;
+    public static String ALERT_ID;
 
     @Inject
     MapsActivityMVP.Presenter presenter;
@@ -119,29 +120,30 @@ public class MapsActivity extends AppCompatActivity implements
         presenter.setView(this);
         client.setClient(googleApiClient);
 
-        helpButton.setOnTouchListener(helpButtonListener);
-        chatFab.setOnClickListener(fabListener);
-        drawer.addDrawerListener(drawerListener);
-
         SupportMapFragment mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         initializeActionBar();
         registerClientCallbacks();
+
+        helpButton.setOnTouchListener(helpButtonListener);
+        userEditButton.setOnClickListener(v -> userUpdateFragment());
+        chatFab.setOnClickListener(fabListener);
+        drawer.addDrawerListener(drawerListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (!isEmergency){
+        if (!IS_EMERGENCY){
             client.disconnectClient();
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (isEmergency) {
+        if (IS_EMERGENCY) {
             moveTaskToBack(true);
         } else super.onBackPressed();
     }
@@ -152,12 +154,13 @@ public class MapsActivity extends AppCompatActivity implements
         unregisterClientCallbacks();
         presenter.clearLocation();
         client.disconnectClient();
+        client.unsubscribeToLocationUpdates();
     }
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         initializeMap(googleMap);
-        presenter.onMapReady();
+        client.subscribeToLocationUpdates();
     }
 
     @Override
@@ -207,10 +210,7 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        ReportDialogFragment fragment = new ReportDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("location", latLng);
-        fragment.setArguments(bundle);
+        ReportDialogFragment fragment = ReportDialogFragment.newInstance(latLng);
         fragment.show(getFragmentManager(), "report");
     }
 
@@ -277,17 +277,6 @@ public class MapsActivity extends AppCompatActivity implements
             helpButton.setVisibility(GONE);
             helpFlame.setVisibility(GONE);
         }
-    }
-
-    @Override
-    public void showUpdatePhoneDialog() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setIcon(R.drawable.logo_full);
-        alertDialogBuilder.setTitle("Reminder");
-        alertDialogBuilder.setMessage("Please update phone number");
-        alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> userUpdateFragment());
-        AlertDialog dialog = alertDialogBuilder.create();
-        dialog.show();
     }
 
     private void userUpdateFragment() {

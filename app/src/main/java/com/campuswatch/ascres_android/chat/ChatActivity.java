@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 import static com.campuswatch.ascres_android.Constants.APP_TAG;
 import static com.campuswatch.ascres_android.Constants.IMAGE_CAPTURE_CODE;
 import static com.campuswatch.ascres_android.Constants.IMAGE_GALLERY_REQUEST;
-import static com.campuswatch.ascres_android.UserRepository.isEmergency;
+import static com.campuswatch.ascres_android.map.MapsActivity.IS_EMERGENCY;
 
 public class ChatActivity extends AppCompatActivity
         implements ChatActivityMVP.View {
@@ -75,7 +75,7 @@ public class ChatActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        if (!isEmergency) {
+        if (!IS_EMERGENCY) {
             finish();
         }
     }
@@ -83,7 +83,7 @@ public class ChatActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!isEmergency) {
+        if (!IS_EMERGENCY) {
             presenter.cleanChatAdapter();
         }
     }

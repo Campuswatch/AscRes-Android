@@ -12,14 +12,14 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-import static com.campuswatch.ascres_android.Constants.USER_DATA;
-
 /**
  * Thought of by samwyz for the most part on 4/12/17.
  */
 
 @Module
 public class ApplicationModule {
+
+    private static final String USER_DATA = "user";
 
     private final App app;
 

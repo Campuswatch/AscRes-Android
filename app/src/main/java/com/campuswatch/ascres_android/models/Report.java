@@ -8,18 +8,16 @@ public class Report {
 
     private double lat;
     private double lon;
-    private int campus;
     private long timestamp;
     private int category;
     private String uid;
 
     public Report(){}
 
-    public Report(double lat, double lon, int campus, long timestamp, int category, String uid) {
+    public Report(double lat, double lon, long timestamp, int category, String uid) {
 
         this.lat = lat;
         this.lon = lon;
-        this.campus = campus;
         this.category = category;
         this.timestamp = timestamp;
         this.uid = uid;
@@ -33,10 +31,6 @@ public class Report {
         return lon;
     }
 
-    public int getCampus() {
-        return campus;
-    }
-
     public long getTimestamp() {
         return timestamp;
     }
@@ -44,4 +38,24 @@ public class Report {
     public int getCategory(){ return category; }
 
     public String getUid(){ return uid; }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }
