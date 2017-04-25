@@ -65,6 +65,11 @@ import static com.campuswatch.ascres_android.Constants.REQUEST_CLIENT_CONNECT;
 import static com.campuswatch.ascres_android.utils.ChooserUtil.incidentChooser;
 import static com.campuswatch.ascres_android.utils.ChooserUtil.spotChooser;
 import static com.campuswatch.ascres_android.utils.DateUtil.convertTimestampDateTime;
+import static com.campuswatch.ascres_android.utils.PhoneUtil.formatPhoneNumber;
+
+//TODO fix tutorial fabs
+//TODO make dispatched snackbar indefinite and dismissable
+//TODO restrict user updates to pic and phone
 
 public class MapsActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -241,7 +246,7 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     public void setUserDrawer(User user) {
         userName.setText(user.getName());
-        userPhone.setText(user.getPhone());
+        userPhone.setText(formatPhoneNumber(user.getPhone()));
         userEmail.setText(user.getEmail());
         Glide.with(this).load(user.getImage())
                 .placeholder(R.drawable.help_button)
@@ -308,7 +313,6 @@ public class MapsActivity extends AppCompatActivity implements
             }
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {

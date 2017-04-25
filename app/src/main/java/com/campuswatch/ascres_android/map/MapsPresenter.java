@@ -71,15 +71,18 @@ class MapsPresenter implements
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         view.makeToast("Error, reconnecting...", Toast.LENGTH_SHORT);
-//                        startAlerts();
+                        startAlerts();
                         return;
                     }
 
                     IS_EMERGENCY = true;
                     view.showChatFab();
                     view.hideHelpButton();
-                    model.getAlertReference().child(ALERT_ID)
-                            .addValueEventListener(alertListener);
+
+                    model.getAlertReference().child(ALERT_ID).child("emergency")
+                            .addValueEventListener(emergencyListener);
+                    model.getAlertReference().child(ALERT_ID).child("dispatched")
+                            .addValueEventListener(dispatchedListener);
                 });
     }
 
@@ -165,35 +168,52 @@ class MapsPresenter implements
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {}
+        public void onCancelled(DatabaseError databaseError) {
+            view.makeToast(databaseError.getMessage(), Toast.LENGTH_SHORT);
+        }
     };
 
-    private ValueEventListener alertListener = new ValueEventListener() {
+    private ValueEventListener emergencyListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
+            if (!dataSnapshot.getValue(Boolean.class)) {
 
-            switch (dataSnapshot.getKey()) {
-                case "emergency":
-                    if (!dataSnapshot.getValue(Boolean.class)) {
-                        IS_EMERGENCY = false;
-                        ALERT_ID = null;
-                        view.showHelpButton();
-                        view.setHelpButton(false);
-                        view.hideChatFab();
-                    } break;
-                case "dispatched":
-                    if (dataSnapshot.getValue(Boolean.class)) {
-                        view.makeSnackbar("Help is on the way", Snackbar.LENGTH_LONG);
-                    } break;
-                default:
-                    break;
+                model.getAlertReference().child(ALERT_ID).child("emergency")
+                        .removeEventListener(this);
+
+                model.getAlertReference().child(ALERT_ID).child("dispatched")
+                        .removeEventListener(dispatchedListener);
+
+                IS_EMERGENCY = false;
+                ALERT_ID = null;
+
+                view.showHelpButton();
+                view.setHelpButton(false);
+                view.hideChatFab();
 
             }
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
+            view.makeToast(databaseError.getMessage(), Toast.LENGTH_SHORT);
+        }
+    };
 
+    private ValueEventListener dispatchedListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (dataSnapshot.getValue(Boolean.class)) {
+                view.makeSnackbar("Help is on the way", Snackbar.LENGTH_LONG);
+
+                model.getAlertReference().child(ALERT_ID).child("dispatched")
+                        .removeEventListener(this);
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            view.makeToast(databaseError.getMessage(), Toast.LENGTH_SHORT);
         }
     };
 }

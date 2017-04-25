@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -19,7 +19,6 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.campuswatch.ascres_android.R;
@@ -37,7 +36,7 @@ import static com.campuswatch.ascres_android.Constants.STORAGE_PERMISSION_REQUES
 public class UserImageFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.image_button)
-    ImageButton captureButton;
+    FloatingActionButton captureButton;
 
     private ImageCapturedListener mListener;
     private Uri mCurrentPhotoPath;
@@ -101,24 +100,18 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
         if (requestCode == STORAGE_PERMISSION_REQUEST) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 dispatchImageCaptureIntent();
-            }
+            } else showSnackbarRationale();
         }
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void checkStoragePermission() {
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                showSnackbarRationale();
-            } else {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        STORAGE_PERMISSION_REQUEST);
-            }
+
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    STORAGE_PERMISSION_REQUEST);
+
         } else dispatchImageCaptureIntent();
     }
 
@@ -126,11 +119,10 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
         Snackbar.make(getActivity().findViewById(android.R.id.content),
                 "Storage access required to upload images to dispatch and user profile",
                 Snackbar.LENGTH_INDEFINITE)
-                .setAction("OK", view -> ActivityCompat.requestPermissions(getActivity(),
+                .setAction("OK", view -> requestPermissions(
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         STORAGE_PERMISSION_REQUEST)).show();
     }
-
 
     private void dispatchImageCaptureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

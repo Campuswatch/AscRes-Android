@@ -7,6 +7,14 @@
     android:padding="8dp"
     tools:context="com.campuswatch.ascres_android.login.UserPhoneFragment">
 
+    <com.campuswatch.ascres_android.views.SamuelsMediumTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/phone_et"
+        android:text="@string/phone_info"
+        android:textAlignment="center"
+        android:padding="30dp"
+        android:textSize="20sp"/>
     <EditText
         android:id="@+id/phone_et"
         android:layout_width="250dp"
@@ -23,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="80dp"
         android:background="@color/prussianBlue"
         android:textColor="@color/white"
         android:text="@string/phone_ok"/>

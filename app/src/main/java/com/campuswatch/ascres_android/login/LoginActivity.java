@@ -58,7 +58,7 @@ public class LoginActivity extends BaseLoginActivity implements
         ((App) getApplication()).getComponent().inject(this);
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        mHouseRef = db.getReference("household");
+        mHouseRef = db.getReference("households");
         mUserRef = db.getReference("users");
         mImageRef = FirebaseStorage.getInstance().getReference("images");
         mAuth = FirebaseAuth.getInstance();
@@ -133,9 +133,9 @@ public class LoginActivity extends BaseLoginActivity implements
     public void onImageCaptured(Uri imagePath) {
         showProgressDialog();
         mImageRef.child(mUid).child(mUid).putFile(imagePath).addOnCompleteListener(this, task -> {
-            hideProgressDialog();
 
             if (!task.isSuccessful()) {
+                hideProgressDialog();
                 makeToast("Image upload failed.");
                 return;
             }
@@ -149,7 +149,6 @@ public class LoginActivity extends BaseLoginActivity implements
     }
 
     private void getHousehold() {
-        showProgressDialog();
 
         mHouseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -167,7 +166,8 @@ public class LoginActivity extends BaseLoginActivity implements
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                hideProgressDialog();
+                makeToast(databaseError.getMessage());
             }
         });
     }

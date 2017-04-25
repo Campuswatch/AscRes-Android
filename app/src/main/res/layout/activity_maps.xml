@@ -111,6 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
+                        android:textAlignment="center"
                         android:textSize="17sp"/>
 
                     <com.campuswatch.ascres_android.views.SamuelsMediumTextView
@@ -118,6 +119,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
+                        android:textAlignment="center"
                         android:textSize="17sp"/>
 
                 </LinearLayout>

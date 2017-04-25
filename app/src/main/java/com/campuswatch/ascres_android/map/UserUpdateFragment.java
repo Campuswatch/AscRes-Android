@@ -93,7 +93,7 @@ public class UserUpdateFragment extends DialogFragment {
         nameEdit.setText(user.getName());
         emailEdit.setText(user.getEmail());
         Glide.with(this).load(imageUri)
-                .placeholder(R.drawable.as_logo_no_background)
+                .placeholder(R.drawable.help_button)
                 .bitmapTransform(new ImageTransform(this.getContext()))
                 .into(imageEdit);
 
