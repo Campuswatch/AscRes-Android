@@ -93,7 +93,7 @@ public class UserUpdateFragment extends DialogFragment {
         nameEdit.setText(user.getName());
         emailEdit.setText(user.getEmail());
         Glide.with(this).load(imageUri)
-                .placeholder(R.drawable.logo_full_resize)
+                .placeholder(R.drawable.as_logo_no_background)
                 .bitmapTransform(new ImageTransform(this.getContext()))
                 .into(imageEdit);
 
@@ -170,7 +170,7 @@ public class UserUpdateFragment extends DialogFragment {
                 if (selectedImageUri != null) {
                     imageUri = selectedImageUri;
                     Glide.with(this).load(imageUri)
-                            .placeholder(R.drawable.logo_full_resize)
+                            .placeholder(R.drawable.as_logo_no_background)
                             .bitmapTransform(new ImageTransform(this.getContext()))
                             .into(imageEdit);
                 }

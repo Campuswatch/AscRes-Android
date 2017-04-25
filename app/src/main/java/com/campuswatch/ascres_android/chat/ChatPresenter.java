@@ -38,8 +38,8 @@ class ChatPresenter implements ChatActivityMVP.Presenter {
     public void initializeChat() {
         adapter = getAdapter();
         view.setChatAdapterAndManager(adapter);
-        model.getChatReference().child(String.valueOf(0))
-                .child(ALERT_ID).addValueEventListener(new ValueEventListener() {
+        model.getChatReference().child(ALERT_ID)
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 view.smoothScroll(dataSnapshot.getChildrenCount());
@@ -57,6 +57,7 @@ class ChatPresenter implements ChatActivityMVP.Presenter {
                     DateUtil.getTimeInMillis(), ALERT_ID, false);
             model.getChatReference().child(ALERT_ID)
                     .push().setValue(chat);
+
         } else {
             view.makeToast("Your alert has been resolved");
         }

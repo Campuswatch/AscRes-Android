@@ -5,11 +5,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.campuswatch.ascres_android.R;
@@ -66,9 +64,6 @@ public class ReportDialogFragment extends DialogFragment implements View.OnClick
 
         View view = inflater.inflate(R.layout.fragment_report, container, false);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00FFFFFF")));
-        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
-        params.gravity = Gravity.TOP;
-        getDialog().getWindow().setAttributes(params);
 
         ButterKnife.bind(this, view);
 

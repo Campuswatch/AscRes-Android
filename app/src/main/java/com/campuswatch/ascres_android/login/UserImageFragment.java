@@ -19,7 +19,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.campuswatch.ascres_android.R;
@@ -36,7 +36,8 @@ import static com.campuswatch.ascres_android.Constants.STORAGE_PERMISSION_REQUES
 
 public class UserImageFragment extends Fragment implements View.OnClickListener {
 
-    @BindView(R.id.image_button) Button captureButton;
+    @BindView(R.id.image_button)
+    ImageButton captureButton;
 
     private ImageCapturedListener mListener;
     private Uri mCurrentPhotoPath;
@@ -96,12 +97,14 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == STORAGE_PERMISSION_REQUEST) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 dispatchImageCaptureIntent();
             }
         }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void checkStoragePermission() {
@@ -143,7 +146,7 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
 
             if (photoFile != null) {
                 mCurrentPhotoPath = FileProvider.getUriForFile(getActivity(),
-                        "com.example.android.fileprovider",
+                        "com.campuswatch.ascres_android",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoPath);
                 startActivityForResult(takePictureIntent, IMAGE_CAPTURE_CODE);

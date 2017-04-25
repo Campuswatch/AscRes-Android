@@ -25,7 +25,7 @@
                 android:id="@+id/user_update_image"
                 android:clickable="true"
                 android:layout_gravity="center"
-                android:src="@drawable/logo_full"
+                android:src="@drawable/help_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -48,13 +48,14 @@
             android:layout_height="wrap_content"
             android:text="Update profile"
             android:gravity="center_horizontal|top"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textAllCaps="true"/>
 
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
-        android:background="#d6ffffff"
+        android:background="@color/charcoalGrey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -68,36 +69,39 @@
             android:id="@+id/name_update_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/midnight"
+            android:textColor="@color/white"
             android:inputType="textPersonName"
             android:layout_margin="5dp"
-            android:hint="Name"/>
+            android:hint="Name"
+            android:textColorHint="@color/paleGrey"/>
 
         <EditText
             android:id="@+id/phone_update_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/midnight"
+            android:textColor="@color/white"
             android:layout_margin="5dp"
             android:inputType="phone"
-            android:hint="Phone #"/>
+            android:hint="Phone #"
+            android:textColorHint="@color/paleGrey"/>
 
         <EditText
             android:id="@+id/email_update_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:textColor="@color/midnight"
+            android:textColor="@color/white"
             android:layout_margin="5dp"
-            android:hint="Email"/>
+            android:hint="Email"
+            android:textColorHint="@color/paleGrey"/>
 
         <Button
             android:id="@+id/update_fragment_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/off_white"
-            android:background="@color/colorPrimary"
-            android:text="OK"/>
+            android:textColor="@color/white"
+            android:background="@color/prussianBlue"
+            android:text="UPDATE"/>
     </LinearLayout>
 
 </LinearLayout>

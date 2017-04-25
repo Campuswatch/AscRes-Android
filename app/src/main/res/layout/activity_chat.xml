@@ -5,7 +5,7 @@
     android:id="@+id/contentRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/midnight"
+    android:background="@color/silver"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -14,7 +14,16 @@
         android:background="@color/colorPrimaryDark"
         android:layout_alignParentTop="true"
         android:elevation="4dp"
-        android:layout_height="20dp"/>
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="6dp"
+            android:src="@drawable/as_logo_no_background"/>
+
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chat_recycler"
@@ -34,8 +43,8 @@
         android:paddingEnd="40dp"
         android:paddingRight="40dp"
         android:elevation="4dp"
-        android:textColorHint="@color/gray"
-        android:textColor="@color/off_white"
+        android:textColorHint="@color/paleGrey"
+        android:textColor="@color/white"
         android:background="@drawable/chat_message_background"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"

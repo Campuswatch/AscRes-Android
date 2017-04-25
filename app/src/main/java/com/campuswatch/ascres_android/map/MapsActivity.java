@@ -99,8 +99,6 @@ public class MapsActivity extends AppCompatActivity implements
     TextView userEmail;
     @BindView(R.id.user_image)
     ImageView userImage;
-    @BindView(R.id.help_flame)
-    ImageView helpFlame;
     @BindView(R.id.user_update_button)
     ImageButton userEditButton;
     @BindView(R.id.chat_fab)
@@ -134,6 +132,12 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.getReports();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if (!IS_EMERGENCY){
@@ -160,7 +164,6 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         initializeMap(googleMap);
-        client.subscribeToLocationUpdates();
     }
 
     @Override
@@ -189,9 +192,6 @@ public class MapsActivity extends AppCompatActivity implements
 
     private void initializeMap(GoogleMap map) {
         if (checkPermission()) {
-//            MapStyleOptions style = MapStyleOptions
-//                    .loadRawResourceStyle(MapsActivity.this, R.raw.mapstyle);
-//            map.setMapStyle(style);
             map.getUiSettings().setMapToolbarEnabled(false);
             map.getUiSettings().setIndoorLevelPickerEnabled(false);
             map.setInfoWindowAdapter(new ReportWindowAdapter(this));
@@ -244,7 +244,7 @@ public class MapsActivity extends AppCompatActivity implements
         userPhone.setText(user.getPhone());
         userEmail.setText(user.getEmail());
         Glide.with(this).load(user.getImage())
-                .placeholder(R.drawable.logo_full_resize)
+                .placeholder(R.drawable.help_button)
                 .bitmapTransform(new ImageTransform(this))
                 .into(userImage);
     }
@@ -267,7 +267,6 @@ public class MapsActivity extends AppCompatActivity implements
     public void showHelpButton() {
         if (helpButton != null && helpButton.getVisibility() == GONE) {
             helpButton.setVisibility(VISIBLE);
-            helpFlame.setVisibility(VISIBLE);
         }
     }
 
@@ -275,7 +274,6 @@ public class MapsActivity extends AppCompatActivity implements
     public void hideHelpButton() {
         if (helpButton != null && helpButton.getVisibility() == VISIBLE) {
             helpButton.setVisibility(GONE);
-            helpFlame.setVisibility(GONE);
         }
     }
 
@@ -300,20 +298,17 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Override
     public void setHelpButton(boolean isEmergency) {
-        if (isEmergency){
-            if (helpButton != null) {
-                helpButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.orange_button));
+        if (helpButton != null) {
+            if (isEmergency) {
                 helpButton.setBorderProgressColor(ContextCompat.getColor(this, R.color.colorAccent));
                 helpButton.setValue(100, true);
-            }
-        } else {
-            if (helpButton != null) {
-                helpButton.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.green_button));
+            } else {
                 helpButton.setBorderProgressColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 helpButton.setValue(0, true);
             }
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
@@ -348,7 +343,6 @@ public class MapsActivity extends AppCompatActivity implements
     private void initializeActionBar() {
         setSupportActionBar(mapToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setLogo(R.drawable.toolbar_logo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -382,6 +376,7 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         client.requestLocationUpdates();
+        client.subscribeToLocationUpdates();
     }
 
     @Override

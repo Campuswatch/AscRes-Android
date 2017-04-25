@@ -13,7 +13,6 @@ import com.campuswatch.ascres_android.utils.DateUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -70,25 +69,18 @@ class MapsPresenter implements
                         location.getLongitude(),
                         DateUtil.getTimeInMillis(), false, true))
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        IS_EMERGENCY = true;
-                        view.showChatFab();
-                        view.hideHelpButton();
-                        setAlertListener();
-                    } else {
+                    if (!task.isSuccessful()) {
                         view.makeToast("Error, reconnecting...", Toast.LENGTH_SHORT);
-                        startAlerts();
+//                        startAlerts();
+                        return;
                     }
+
+                    IS_EMERGENCY = true;
+                    view.showChatFab();
+                    view.hideHelpButton();
+                    model.getAlertReference().child(ALERT_ID)
+                            .addValueEventListener(alertListener);
                 });
-    }
-
-    @Override
-    public void setAlertListener() {
-        DatabaseReference ref = model.getAlertReference()
-                .child(ALERT_ID);
-
-        ref.child("emergency").addValueEventListener(emergencyValueListener);
-        ref.child("dispatched").addValueEventListener(dispatchedValueListener);
     }
 
     @Override
@@ -136,6 +128,11 @@ class MapsPresenter implements
         location = null;
     }
 
+    @Override
+    public void getReports() {
+        model.getReportReference().addValueEventListener(reportEventListener);
+    }
+
     private void onFirstLocationUpdate(Location location) {
         view.setMapLocation(location);
         view.showHelpButton();
@@ -150,12 +147,6 @@ class MapsPresenter implements
         repo.setUser(user);
         return user;
     }
-
-//    private void setCampusValue(int campus) {
-//        repo.getUser().setCampus(campus);
-//        model.getReportReference().child(String.valueOf(campus))
-//                .addValueEventListener(reportEventListener);
-//    }
 
     private ValueEventListener reportEventListener = new ValueEventListener() {
         @Override
@@ -177,35 +168,26 @@ class MapsPresenter implements
         public void onCancelled(DatabaseError databaseError) {}
     };
 
-    private ValueEventListener emergencyValueListener = new ValueEventListener() {
+    private ValueEventListener alertListener = new ValueEventListener() {
         @Override
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
-            if (dataSnapshot.getValue(Boolean.class) != null) {
-                if (!dataSnapshot.getValue(Boolean.class)) {
-                    IS_EMERGENCY = false;
-                    ALERT_ID = null;
-                    view.showHelpButton();
-                    view.setHelpButton(false);
-                    view.hideChatFab();
-                }
-            }
-        }
+        public void onDataChange(DataSnapshot dataSnapshot) {
 
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
+            switch (dataSnapshot.getKey()) {
+                case "emergency":
+                    if (!dataSnapshot.getValue(Boolean.class)) {
+                        IS_EMERGENCY = false;
+                        ALERT_ID = null;
+                        view.showHelpButton();
+                        view.setHelpButton(false);
+                        view.hideChatFab();
+                    } break;
+                case "dispatched":
+                    if (dataSnapshot.getValue(Boolean.class)) {
+                        view.makeSnackbar("Help is on the way", Snackbar.LENGTH_LONG);
+                    } break;
+                default:
+                    break;
 
-        }
-    };
-
-    private ValueEventListener dispatchedValueListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
-            if (dataSnapshot.getValue(Boolean.class) != null) {
-                if (dataSnapshot.getValue(Boolean.class)) {
-                    view.makeSnackbar("Help is on the way", Snackbar.LENGTH_LONG);
-                }
             }
         }
 

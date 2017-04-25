@@ -3,21 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login"
     android:padding="8dp"
     tools:context="com.campuswatch.ascres_android.login.UserPhoneFragment">
 
     <EditText
         android:id="@+id/phone_et"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_above="@+id/phone_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:hint="Phone Number"
         android:inputType="phone" />
 
     <Button
         android:id="@+id/phone_button"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/phone_et"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:background="@color/prussianBlue"
+        android:textColor="@color/white"
         android:text="@string/phone_ok"/>
 
 </RelativeLayout>

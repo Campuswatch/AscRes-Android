@@ -3,20 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
+    android:background="@drawable/login"
     tools:context="com.campuswatch.ascres_android.login.UserImageFragment">
 
-    <TextView
+    <com.campuswatch.ascres_android.views.SamuelsMediumTextView
         android:id="@+id/image_info_tv"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_above="@+id/image_button"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:padding="30dp"
+        android:textSize="20sp"
         android:text="@string/image_info"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/image_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/image_info_tv"
-        android:text="@string/image_capture"/>
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/prussianBlue"
+        android:textColor="@color/white"
+        android:src="@drawable/ic_camera_action"/>
 
 </RelativeLayout>

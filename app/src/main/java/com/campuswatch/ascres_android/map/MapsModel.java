@@ -22,8 +22,8 @@ public class MapsModel implements MapsActivityMVP.Model {
         FirebaseDatabase firebase = FirebaseDatabase.getInstance();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         userRef = firebase.getReference("users");
-        alertRef = firebase.getReference("alerts-test");
-        reportRef = firebase.getReference("reports-test");
+        alertRef = firebase.getReference("alerts");
+        reportRef = firebase.getReference("reports");
         imageRef = storage.getReference("images");
     }
 

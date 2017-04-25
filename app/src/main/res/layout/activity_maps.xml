@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        tools:context="net.campuswatch.campuswatch.map.MapsActivity">
+        tools:context="com.campuswatch.ascres_android.map.MapsActivity">
 
         <fragment
             android:id="@+id/map"
@@ -26,9 +26,18 @@
                 android:id="@+id/map_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/clear_dark"
+                android:background="@color/colorPrimaryDark"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="6dp"
+                android:src="@drawable/as_logo_no_background"/>
+
+            </android.support.v7.widget.Toolbar>
 
         </fragment>
 
@@ -40,23 +49,12 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="30dp"
             android:clickable="true"
-            android:src="@drawable/green_button"
+            android:src="@drawable/help_button"
             app:border_color="#00ffffff"
             app:border_width="3dp"
             app:center_circle_diameter="1"
             app:progress_color="@color/colorPrimary"
             app:progress_startAngle="270" />
-
-        <ImageView
-            android:id="@+id/help_flame"
-            android:src="@drawable/big_button_flame"
-            android:layout_width="185dp"
-            android:layout_height="185dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="25dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginLeft="1dp"
-            tools:ignore="ContentDescription" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/chat_fab"
@@ -65,7 +63,8 @@
             app:backgroundTint="@color/colorPrimary"
             android:layout_gravity="bottom|end"
             android:src="@drawable/chat_word"
-            android:layout_margin="20dp" />
+            android:layout_margin="20dp"
+            android:visibility="gone"/>
 
     </FrameLayout>
 
@@ -76,7 +75,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            android:background="@color/clear_dark">
+            android:background="@color/colorPrimaryDark">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -102,7 +101,7 @@
                         android:id="@+id/user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/off_white"
+                        android:textColor="@color/white"
                         android:textAlignment="center"
                         android:layout_marginBottom="5dp"
                         android:textSize="22sp"/>
@@ -111,14 +110,14 @@
                         android:id="@+id/user_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/off_white"
+                        android:textColor="@color/white"
                         android:textSize="17sp"/>
 
                     <com.campuswatch.ascres_android.views.SamuelsMediumTextView
                         android:id="@+id/user_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/off_white"
+                        android:textColor="@color/white"
                         android:textSize="17sp"/>
 
                 </LinearLayout>

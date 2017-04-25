@@ -1,98 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:animateLayoutChanges="true"
-    android:padding="30dp" android:paddingEnd="40dp" android:paddingStart="40dp">
+    android:layout_height="wrap_content" android:animateLayoutChanges="true"
+    android:paddingLeft="12dp" android:paddingRight="12dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/cw_window_scheme">
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--android:background="@drawable/cw_window_scheme">-->
 
-    <ImageView
-        android:id="@+id/report_torch"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:src="@drawable/logo_full"/>
-
-    <com.campuswatch.ascres_android.views.SamuelsMediumTextView
+    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
         android:id="@+id/report_text6"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="REPORT AN INCIDENT"
+        android:layout_height="match_parent"
+        android:text="SUBMIT A TIP"
+        android:textColor="@color/white"
         android:gravity="center_horizontal|bottom"
-        android:layout_marginBottom="5dp"
-        android:textSize="20sp"/>
-    </LinearLayout>
+        android:paddingBottom="4dp"
+        android:background="@drawable/cw_window_scheme"
+        android:textSize="16sp"/>
+    <!--</RelativeLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/report_window_background"
         android:orientation="vertical"
-        android:background="@drawable/report_window_background">
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
-    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
-        android:tag="0"
-        android:id="@+id/report_text1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="MASS PUBLIC THREAT"
-        android:gravity="center"
-        android:textColor="#910505"
-        android:layout_margin="10dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="20sp"
-        android:clickable="true"/>
+        <com.campuswatch.ascres_android.views.SamuelsBoldTextView
+            android:id="@+id/report_text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:tag="0"
+            android:text="MASS PUBLIC THREAT"
+            android:textColor="#910505"
+            android:textSize="20sp" />
 
-    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
-        android:tag="1"
-        android:id="@+id/report_text2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ASSAULT"
-        android:textColor="#c43307"
-        android:gravity="center"
-        android:layout_margin="10dp"
-        android:textSize="20sp"
-        android:clickable="true"/>
+        <View
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
 
-    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
-        android:tag="2"
-        android:id="@+id/report_text3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="HARASSMENT"
-        android:textColor="#e25731"
-        android:gravity="center"
-        android:layout_margin="10dp"
-        android:textSize="20sp"
-        android:clickable="true"/>
+        <com.campuswatch.ascres_android.views.SamuelsBoldTextView
+            android:id="@+id/report_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:tag="1"
+            android:text="ASSAULT"
+            android:textColor="#c43307"
+            android:textSize="20sp" />
 
-    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
-        android:tag="3"
-        android:id="@+id/report_text4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="THEFT"
-        android:gravity="center"
-        android:textColor="#ed881c"
-        android:layout_margin="10dp"
-        android:textSize="20sp"
-        android:clickable="true"/>
+        <View
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
 
-    <com.campuswatch.ascres_android.views.SamuelsBoldTextView
-        android:tag="4"
-        android:id="@+id/report_text5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SUSPICIOUS ACTIVITY"
-        android:gravity="center"
-        android:layout_margin="10dp"
-        android:textColor="#eab84c"
-        android:textSize="20sp"
-        android:clickable="true"/>
+        <com.campuswatch.ascres_android.views.SamuelsBoldTextView
+            android:id="@+id/report_text3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:tag="2"
+            android:text="HARASSMENT"
+            android:textColor="#e25731"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <com.campuswatch.ascres_android.views.SamuelsBoldTextView
+            android:id="@+id/report_text4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:tag="3"
+            android:text="THEFT"
+            android:textColor="#ed881c"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <com.campuswatch.ascres_android.views.SamuelsBoldTextView
+            android:id="@+id/report_text5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:tag="4"
+            android:text="SUSPICIOUS ACTIVITY"
+            android:textColor="#eab84c"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

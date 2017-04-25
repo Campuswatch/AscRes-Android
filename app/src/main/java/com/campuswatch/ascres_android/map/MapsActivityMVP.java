@@ -37,13 +37,13 @@ public interface MapsActivityMVP {
     interface Presenter
     {
         void setView(View view);
-        void setAlertListener();
         void startAlerts();
         void setEmergencyLocation(Location location);
         void setLatestLocation(Location location);
         User getUser();
         Location getLocation();
         void clearLocation();
+        void getReports();
         void sendReport(LatLng latLng, int category);
         void setUserUpdate(String name, String phone, String email, Uri image);
     }

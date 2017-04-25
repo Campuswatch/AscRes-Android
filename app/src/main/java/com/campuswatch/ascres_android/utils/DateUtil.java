@@ -15,7 +15,7 @@ public class DateUtil {
     public static String convertTimestampDateTime(long milliseconds){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milliseconds);
-        SimpleDateFormat format = new SimpleDateFormat("MMMM d, yyyy '\n' h:mm a", Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat("MMMM d, yyyy '\n'h:mm a", Locale.US);
         return format.format(calendar.getTime());
     }
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#00ffffff">
+    android:layout_height="match_parent" android:background="@color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:background="@drawable/info_window_background">
 
         <com.campuswatch.ascres_android.views.SamuelsBoldTextView
@@ -18,7 +19,8 @@
             android:paddingTop="3dp"
             android:layout_marginBottom="3dp"
             android:gravity="center"
-            android:background="@drawable/cw_gradient"/>
+            android:textColor="@color/white"
+            android:background="@drawable/as_gradient"/>
 
         <com.campuswatch.ascres_android.views.SamuelsMediumTextView
             android:id="@+id/incident_time_text"
@@ -26,22 +28,9 @@
             android:layout_height="0dp"
             android:layout_weight="1.25"
             android:layout_margin="1dp"
-            android:background="#00ffffff"
+            android:textColor="@color/white"
+            android:background="@color/transparent"
             android:padding="5dp"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout android:layout_height="10dp" android:orientation="vertical"
-        android:layout_width="match_parent" android:background="#00ffffff">
-
-        <ImageView
-            android:src="@drawable/triangle3x"
-            android:layout_width="30dp"
-            android:background="#00ffffff"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:foregroundGravity="top"/>
 
     </LinearLayout>
 

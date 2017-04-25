@@ -61,7 +61,7 @@ class ClientHelper implements MapsActivityMVP.Client, LocationListener {
     public void requestLocationUpdates() {
         LocationRequest locationRequest = buildLocationRequest();
         if (checkPermission()) {
-            FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
+            FusedLocationApi.requestLocationUpdates(client, locationRequest, ClientHelper.this);
         }
     }
 

@@ -14,13 +14,15 @@ public class User {
     private String email;
     private String phone;
     private String image;
+    private String household;
 
-    public User(String uid, String name, String email, String phone, String image) {
+    public User(String uid, String name, String email, String phone, String image, String household) {
         this.uid = uid;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.image = image;
+        this.household = household;
     }
 
     public String getUid() {
@@ -61,6 +63,14 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getHousehold() {
+        return household;
+    }
+
+    public void setHousehold(String household) {
+        this.household = household;
     }
 
     public String serialize() {
