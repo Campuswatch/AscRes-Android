@@ -6,12 +6,12 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -23,8 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,7 +36,6 @@ import com.campuswatch.ascres_android.models.User;
 import com.campuswatch.ascres_android.root.App;
 import com.campuswatch.ascres_android.views.CircularProgressBar;
 import com.campuswatch.ascres_android.views.ImageTransform;
-import com.facebook.FacebookSdk;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
@@ -47,7 +44,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -67,9 +63,9 @@ import static com.campuswatch.ascres_android.utils.ChooserUtil.spotChooser;
 import static com.campuswatch.ascres_android.utils.DateUtil.convertTimestampDateTime;
 import static com.campuswatch.ascres_android.utils.PhoneUtil.formatPhoneNumber;
 
-//TODO fix tutorial fabs
-//TODO make dispatched snackbar indefinite and dismissable
-//TODO restrict user updates to pic and phone
+//TODO improve user update functionality
+//TODO camera util to handle camera intent
+//TODO permission fragment to handle permissions
 
 public class MapsActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -90,55 +86,57 @@ public class MapsActivity extends AppCompatActivity implements
     @Inject
     MapsActivityMVP.Client client;
 
-    @BindView(R.id.help_map_button)
-    CircularProgressBar helpButton;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.map_toolbar)
-    Toolbar mapToolbar;
-    @BindView(R.id.user_name)
-    TextView userName;
-    @BindView(R.id.user_phone)
-    TextView userPhone;
-    @BindView(R.id.user_email)
-    TextView userEmail;
-    @BindView(R.id.user_image)
-    ImageView userImage;
-    @BindView(R.id.user_update_button)
-    ImageButton userEditButton;
-    @BindView(R.id.chat_fab)
-    FloatingActionButton chatFab;
+    @BindView(R.id.map_container) CoordinatorLayout rootLayout;
+
+    @BindView(R.id.help_map_button) CircularProgressBar helpButton;
+
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+
+    @BindView(R.id.map_toolbar) Toolbar mapToolbar;
+
+    @BindView(R.id.user_name) TextView userName;
+
+    @BindView(R.id.user_phone) TextView userPhone;
+
+    @BindView(R.id.user_image) ImageView userImage;
+
+    @BindView(R.id.user_update_button) ImageButton userEditButton;
+
+    @BindView(R.id.chat_fab) FloatingActionButton chatFab;
 
     private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_maps);
 
         ((App) getApplication()).getComponent().inject(this);
         ButterKnife.bind(this);
 
-        presenter.setView(this);
-        client.setClient(googleApiClient);
-
         SupportMapFragment mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        initializeActionBar();
+        setSupportActionBar(mapToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        presenter.setView(this);
+        client.setClient(googleApiClient);
+
         registerClientCallbacks();
+        client.connectClient();
 
         helpButton.setOnTouchListener(helpButtonListener);
         userEditButton.setOnClickListener(v -> userUpdateFragment());
-        chatFab.setOnClickListener(fabListener);
-        drawer.addDrawerListener(drawerListener);
+        chatFab.setOnClickListener(chatFabListener);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        client.requestLocationUpdates();
         presenter.getReports();
     }
 
@@ -146,7 +144,7 @@ public class MapsActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
         if (!IS_EMERGENCY){
-            client.disconnectClient();
+            client.removeLocationUpdates();
         }
     }
 
@@ -163,12 +161,20 @@ public class MapsActivity extends AppCompatActivity implements
         unregisterClientCallbacks();
         presenter.clearLocation();
         client.disconnectClient();
-        client.unsubscribeToLocationUpdates();
     }
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        initializeMap(googleMap);
+        if (checkPermission()) {
+            googleMap.getUiSettings().setMapToolbarEnabled(false);
+            googleMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+            googleMap.setInfoWindowAdapter(new ReportWindowAdapter(this));
+            googleMap.setBuildingsEnabled(false);
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+            googleMap.setOnMapLongClickListener(this);
+            this.map =googleMap;
+        }
     }
 
     @Override
@@ -195,19 +201,6 @@ public class MapsActivity extends AppCompatActivity implements
         }
     }
 
-    private void initializeMap(GoogleMap map) {
-        if (checkPermission()) {
-            map.getUiSettings().setMapToolbarEnabled(false);
-            map.getUiSettings().setIndoorLevelPickerEnabled(false);
-            map.setInfoWindowAdapter(new ReportWindowAdapter(this));
-            map.setBuildingsEnabled(false);
-            map.setMyLocationEnabled(true);
-            map.getUiSettings().setMyLocationButtonEnabled(false);
-            map.setOnMapLongClickListener(this);
-            this.map = map;
-        }
-    }
-
     @Override
     public void onDialogClick(DialogFragment dialog, int category, LatLng latlng) {
         presenter.sendReport(latlng, category);
@@ -220,8 +213,10 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void makeSnackbar(String msg, int length) {
-        Snackbar.make(findViewById(android.R.id.content), msg, length).show();
+    public Snackbar makeSnackbar(String msg, int length) {
+        Snackbar s = Snackbar.make(rootLayout, msg, length);
+        s.show();
+        return s;
     }
 
     @Override
@@ -247,7 +242,6 @@ public class MapsActivity extends AppCompatActivity implements
     public void setUserDrawer(User user) {
         userName.setText(user.getName());
         userPhone.setText(formatPhoneNumber(user.getPhone()));
-        userEmail.setText(user.getEmail());
         Glide.with(this).load(user.getImage())
                 .placeholder(R.drawable.help_button)
                 .bitmapTransform(new ImageTransform(this))
@@ -255,28 +249,36 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void showChatFab() {
+    public void showAlertUI(boolean alert) {
+        if (alert) {
+            hideHelpButton();
+            showChatFab();
+        } else {
+            showHelpButton();
+            hideChatFab();
+        }
+    }
+
+    private void showChatFab() {
         if (chatFab != null && chatFab.getVisibility() == GONE) {
             chatFab.setVisibility(VISIBLE);
         }
     }
 
-    @Override
-    public void hideChatFab() {
+    private void hideChatFab() {
         if (chatFab != null && chatFab.getVisibility() == VISIBLE) {
             chatFab.setVisibility(GONE);
         }
     }
 
-    @Override
-    public void showHelpButton() {
+    private void showHelpButton() {
         if (helpButton != null && helpButton.getVisibility() == GONE) {
             helpButton.setVisibility(VISIBLE);
+            helpButton.setValue(0, true);
         }
     }
 
-    @Override
-    public void hideHelpButton() {
+    private void hideHelpButton() {
         if (helpButton != null && helpButton.getVisibility() == VISIBLE) {
             helpButton.setVisibility(GONE);
         }
@@ -290,28 +292,10 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void OnUserUpdated(String name, String phone, String email, Uri image) {
-        presenter.setUserUpdate(name, phone, email, image);
-    }
-
-    @Override
     public boolean checkPermission() {
         return ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
-    }
-
-    @Override
-    public void setHelpButton(boolean isEmergency) {
-        if (helpButton != null) {
-            if (isEmergency) {
-                helpButton.setBorderProgressColor(ContextCompat.getColor(this, R.color.colorAccent));
-                helpButton.setValue(100, true);
-            } else {
-                helpButton.setBorderProgressColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                helpButton.setValue(0, true);
-            }
-        }
     }
 
     @Override
@@ -336,7 +320,6 @@ public class MapsActivity extends AppCompatActivity implements
                 helpButton.setValue(100, true);
             } else if (eventDuration >= 1500 && (boolean) view.getTag()) {
                 view.setTag(false);
-                setHelpButton(true);
                 presenter.startAlerts();
             } else if ((event.getAction() == MotionEvent.ACTION_UP) && (boolean) view.getTag()) {
                 helpButton.setValue(0, true);
@@ -344,43 +327,12 @@ public class MapsActivity extends AppCompatActivity implements
         }
     };
 
-    private void initializeActionBar() {
-        setSupportActionBar(mapToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    DrawerLayout.DrawerListener drawerListener = new DrawerLayout.DrawerListener() {
-        @Override
-        public void onDrawerSlide(View drawerView, float slideOffset) {}
-
-        @Override
-        public void onDrawerOpened(View drawerView) {
-            mapToolbar.animate()
-                    .translationY(-mapToolbar.getBottom())
-                    .setInterpolator(new AccelerateInterpolator())
-                    .start();
-        }
-
-        @Override
-        public void onDrawerClosed(View drawerView) {
-            mapToolbar.animate()
-                    .translationY(0)
-                    .setInterpolator(new DecelerateInterpolator())
-                    .start();
-        }
-
-        @Override
-        public void onDrawerStateChanged(int newState) {}
-    };
-
-    View.OnClickListener fabListener = v ->
+    private View.OnClickListener chatFabListener = v ->
             startActivity(new Intent(MapsActivity.this, ChatActivity.class));
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         client.requestLocationUpdates();
-        client.subscribeToLocationUpdates();
     }
 
     @Override
@@ -444,10 +396,13 @@ public class MapsActivity extends AppCompatActivity implements
         }
     }
 
-    private void drawTestCircle(double lat, double lon, int radius) {
-        map.addCircle(new CircleOptions()
-                .center(new LatLng(lat, lon))
-                .radius(radius)
-                .strokeColor(Color.RED));
+    @Override
+    public void onImageUpdated(Uri image) {
+        presenter.setImageUpdate(image);
+    }
+
+    @Override
+    public void onPhoneUpdated(String phone) {
+        presenter.setPhoneUpdate(phone);
     }
 }

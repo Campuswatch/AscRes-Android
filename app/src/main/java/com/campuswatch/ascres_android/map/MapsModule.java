@@ -1,6 +1,6 @@
 package com.campuswatch.ascres_android.map;
 
-import com.campuswatch.ascres_android.UserRepository;
+import com.campuswatch.ascres_android.root.UserRepository;
 
 import javax.inject.Singleton;
 

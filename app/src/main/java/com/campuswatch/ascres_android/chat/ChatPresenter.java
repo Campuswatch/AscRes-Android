@@ -3,7 +3,7 @@ package com.campuswatch.ascres_android.chat;
 import android.net.Uri;
 
 import com.campuswatch.ascres_android.R;
-import com.campuswatch.ascres_android.UserRepository;
+import com.campuswatch.ascres_android.root.UserRepository;
 import com.campuswatch.ascres_android.models.Chat;
 import com.campuswatch.ascres_android.utils.DateUtil;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;

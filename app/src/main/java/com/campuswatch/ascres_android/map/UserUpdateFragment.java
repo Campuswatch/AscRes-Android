@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.campuswatch.ascres_android.R;
@@ -38,21 +37,13 @@ public class UserUpdateFragment extends DialogFragment {
 
     private static final String USER_DATA = "user";
 
-    @BindView(R.id.user_update_image)
-    ImageView imageEdit;
-    @BindView(R.id.name_update_edit)
-    EditText nameEdit;
-    @BindView(R.id.phone_update_edit)
-    EditText phoneEdit;
-    @BindView(R.id.email_update_edit)
-    EditText emailEdit;
-    @BindView(R.id.update_fragment_button)
-    Button updateButton;
-    @BindView(R.id.update_profile_text)
-    TextView headerText;
+    @BindView(R.id.user_update_image) ImageView imageEdit;
+
+    @BindView(R.id.phone_update_edit) EditText phoneEdit;
+
+    @BindView(R.id.update_fragment_button) Button updateButton;
 
     UserUpdateListener listener;
-    Uri imageUri;
     User user;
 
     public UserUpdateFragment() {
@@ -86,20 +77,16 @@ public class UserUpdateFragment extends DialogFragment {
 
         ButterKnife.bind(this, view);
 
-        imageUri = Uri.parse(user.getImage());
+        Uri imageUri = Uri.parse(user.getImage());
         imageEdit.setOnClickListener(updateImageListener);
         updateButton.setOnClickListener(updateButtonListener);
 
-        nameEdit.setText(user.getName());
-        emailEdit.setText(user.getEmail());
         Glide.with(this).load(imageUri)
                 .placeholder(R.drawable.help_button)
                 .bitmapTransform(new ImageTransform(this.getContext()))
                 .into(imageEdit);
 
-        if (!user.getPhone().equals("")) {
-            phoneEdit.setText(user.getPhone());
-        }
+        phoneEdit.setText(user.getPhone());
 
         return view;
     }
@@ -130,23 +117,14 @@ public class UserUpdateFragment extends DialogFragment {
 
             boolean validated = true;
 
-            if (nameEdit.getText().toString().isEmpty()) {
-                nameEdit.setError("Fill out");
-                validated = false;
-            } if (!isValidMail(emailEdit.getText().toString().trim())) {
-                emailEdit.setError("Invalid email");
-                validated = false;
-            } if (!isValidMobile(phoneEdit.getText().toString().trim())) {
+            if (!isValidMobile(phoneEdit.getText().toString().trim())) {
                 phoneEdit.setError("Invalid phone");
                 validated = false;
             }
 
             if (validated) {
-                nameEdit.setError(""); emailEdit.setError(""); phoneEdit.setError("");
-                listener.OnUserUpdated(nameEdit.getText().toString().trim(),
-                        phoneEdit.getText().toString().trim(),
-                        emailEdit.getText().toString().trim(),
-                        imageUri);
+                phoneEdit.setError("");
+                listener.onPhoneUpdated(phoneEdit.getText().toString().trim());
                 dismiss();
             }
         }
@@ -168,8 +146,8 @@ public class UserUpdateFragment extends DialogFragment {
             if (resultCode == RESULT_OK) {
                 Uri selectedImageUri = data.getData();
                 if (selectedImageUri != null) {
-                    imageUri = selectedImageUri;
-                    Glide.with(this).load(imageUri)
+                    listener.onImageUpdated(selectedImageUri);
+                    Glide.with(this).load(selectedImageUri)
                             .placeholder(R.drawable.as_logo_no_background)
                             .bitmapTransform(new ImageTransform(this.getContext()))
                             .into(imageEdit);
@@ -178,15 +156,12 @@ public class UserUpdateFragment extends DialogFragment {
         }
     }
 
-    public interface UserUpdateListener {
-        void OnUserUpdated(String name, String phone, String email, Uri image);
+    interface UserUpdateListener {
+        void onImageUpdated(Uri image);
+        void onPhoneUpdated(String phone);
     }
 
     private boolean isValidMobile(String phone) {
         return android.util.Patterns.PHONE.matcher(phone).matches();
-    }
-
-    private boolean isValidMail(String email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }

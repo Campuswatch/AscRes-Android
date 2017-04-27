@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import com.campuswatch.ascres_android.R;
-import com.campuswatch.ascres_android.UserRepository;
+import com.campuswatch.ascres_android.root.UserRepository;
 import com.campuswatch.ascres_android.models.User;
 import com.campuswatch.ascres_android.root.App;
 import com.google.firebase.auth.FirebaseAuth;
@@ -160,6 +160,8 @@ public class LoginActivity extends BaseLoginActivity implements
                             buildUserAndFinish();
                             return;
                         }
+
+                        makeToast("Could not validate your account, please contact your provider.");
                     }
                 }
             }

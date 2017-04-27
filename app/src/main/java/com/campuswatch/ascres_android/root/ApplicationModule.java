@@ -3,7 +3,6 @@ package com.campuswatch.ascres_android.root;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.campuswatch.ascres_android.UserRepository;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 

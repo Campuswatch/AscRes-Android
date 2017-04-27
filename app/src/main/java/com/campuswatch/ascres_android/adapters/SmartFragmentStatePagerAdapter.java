@@ -1,4 +1,4 @@
-package com.campuswatch.ascres_android;
+package com.campuswatch.ascres_android.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

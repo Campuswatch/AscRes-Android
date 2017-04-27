@@ -53,6 +53,7 @@
             android:textAllCaps="true"/>
 
     </LinearLayout>
+
     <LinearLayout
         android:orientation="vertical"
         android:background="@color/charcoalGrey"
@@ -66,16 +67,6 @@
             android:focusableInTouchMode="true"/>
 
         <EditText
-            android:id="@+id/name_update_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:inputType="textPersonName"
-            android:layout_margin="5dp"
-            android:hint="Name"
-            android:textColorHint="@color/paleGrey"/>
-
-        <EditText
             android:id="@+id/phone_update_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,16 +74,6 @@
             android:layout_margin="5dp"
             android:inputType="phone"
             android:hint="Phone #"
-            android:textColorHint="@color/paleGrey"/>
-
-        <EditText
-            android:id="@+id/email_update_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/white"
-            android:layout_margin="5dp"
-            android:hint="Email"
             android:textColorHint="@color/paleGrey"/>
 
         <Button

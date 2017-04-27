@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.campuswatch.ascres_android.R;
-import com.campuswatch.ascres_android.SmartFragmentStatePagerAdapter;
+import com.campuswatch.ascres_android.adapters.SmartFragmentStatePagerAdapter;
 import com.campuswatch.ascres_android.map.MapsActivity;
 
 import butterknife.BindView;
@@ -20,13 +20,9 @@ public class TutorialActivity extends AppCompatActivity implements View.OnClickL
 
     private static final int COUNT = 5;
 
-    @BindView(R.id.tutorial_pager)
-    ViewPager pager;
+    @BindView(R.id.tutorial_pager) ViewPager pager;
 
-    @BindView(R.id.next_button)
-    FloatingActionButton nextButton;
-
-    @BindView(R.id.back_button) FloatingActionButton backButton;
+    @BindView(R.id.next_button) FloatingActionButton nextButton;
 
     public final int[] mImageArray = new int[] {
             R.drawable.tut1, R.drawable.tut2, R.drawable.tut3, R.drawable.tut4, R.drawable.tut5
@@ -43,47 +39,31 @@ public class TutorialActivity extends AppCompatActivity implements View.OnClickL
         pager.addOnPageChangeListener(pageChangeListener);
 
         nextButton.setOnClickListener(this);
-        backButton.setOnClickListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.next_button:
-                if (pager.getCurrentItem() < 4) {
-                    pager.setCurrentItem(pager.getCurrentItem() + 1, true);
-                } else {
-                    startActivity(new Intent(TutorialActivity.this, MapsActivity.class));
-                    finish();
-                }
-                break;
-            case R.id.back_button:
-                if (pager.getCurrentItem() > 0) {
-                    pager.setCurrentItem(pager.getCurrentItem() - 1, true);
-                }
+        if (pager.getCurrentItem() == 0) {
+            return;
         }
+
+        pager.setCurrentItem(pager.getCurrentItem() - 1, true);
     }
 
     private ViewPager.SimpleOnPageChangeListener pageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {
-            if (position == 0) {
-                backButton.setVisibility(View.GONE);
-                return;
-            }
-
-            if (backButton.getVisibility() == View.GONE) {
-                backButton.setVisibility(View.VISIBLE);
-            }
+            if (position == 4) {
+                nextButton.setVisibility(View.VISIBLE);
+            } else nextButton.setVisibility(View.GONE);
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(TutorialActivity.this, MapsActivity.class));
+    }
 
     private class TutorialAdapter extends SmartFragmentStatePagerAdapter {
 

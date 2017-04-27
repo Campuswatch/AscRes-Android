@@ -2,6 +2,7 @@ package com.campuswatch.ascres_android.map;
 
 import android.location.Location;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 
 import com.campuswatch.ascres_android.models.Report;
 import com.campuswatch.ascres_android.models.User;
@@ -20,17 +21,13 @@ public interface MapsActivityMVP {
 
     interface View
     {
-        void makeSnackbar(String msg, int length);
+        Snackbar makeSnackbar(String msg, int length);
         void makeToast(String msg, int length);
         void animateMapLocation(Location location);
         void setMapLocation(Location location);
         void getReportMarkers(List<Report> reports);
         void setUserDrawer(User user);
-        void showChatFab();
-        void hideChatFab();
-        void showHelpButton();
-        void hideHelpButton();
-        void setHelpButton(boolean isEmergency);
+        void showAlertUI(boolean alert);
         boolean checkPermission();
     }
 
@@ -45,16 +42,15 @@ public interface MapsActivityMVP {
         void clearLocation();
         void getReports();
         void sendReport(LatLng latLng, int category);
-        void setUserUpdate(String name, String phone, String email, Uri image);
+        void setPhoneUpdate(String phone);
+        void setImageUpdate(Uri image);
     }
 
     interface Model
     {
-        void saveUserFirebase(User user);
         void sendReportFirebase(Report report);
         DatabaseReference getReportReference();
         DatabaseReference getAlertReference();
-        DatabaseReference getUserReference();
         StorageReference getImageRef();
     }
 
@@ -64,7 +60,6 @@ public interface MapsActivityMVP {
         void connectClient();
         void disconnectClient();
         void requestLocationUpdates();
-        void subscribeToLocationUpdates();
-        void unsubscribeToLocationUpdates();
+        void removeLocationUpdates();
     }
 }

@@ -11,16 +11,7 @@
     <string name="phone_ok">OK</string>
     <string name="image_capture">Camera</string>
     <string name="image_info">Snap a selfie so we know who to look for in an emergency.</string>
-
-    <string name="welcomeTutorial">Thank you for downloading Campus Watch! Please follow along with this tutorial to ensure you get full use of the apps features before an emergency situation</string>
-    <string name="tutorial2">In the event of an emergency, or you need assistance, tap and hold it briefly to alert dispatch.  They track your location and send help immediately.</string>
-    <string name="tutorial3">Each dot is a report submitted by other users. You can tap on them for more details or press and hold anywhere on the map to submit one yourself.</string>
-    <string name="profile">When you open the app please take a minute to update your profile by pulling out the drawer from the left side.  Choose a clear photo of yourself and don\'t forget the phone number! These things help us get in touch with you if you are in trouble, and we never share your information</string>
-    <string name="chat">Once you have activated the Help Button you will be connected to Dispatch.  Feel free to give them more information about your situation, or snap a picture with the Camera button. Regardless, help is on the way.</string>
-    <string name="finish">You are all set! If you ever need a refresher on how to use all the features just head over to www.campuswatch.com</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="phone_info">Put in your phone number so we know how to reach you.</string>
+    <string name="phone_update">Phone #</string>
 
 </resources>

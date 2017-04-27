@@ -9,10 +9,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.subjects.PublishSubject;
-
 import static com.campuswatch.ascres_android.Constants.UPDATE_INTERVAL;
 import static com.campuswatch.ascres_android.map.MapsActivity.IS_EMERGENCY;
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
@@ -25,17 +21,17 @@ class ClientHelper implements MapsActivityMVP.Client, LocationListener {
 
     private MapsActivityMVP.Presenter presenter;
     private GoogleApiClient client;
-    private PublishSubject<Location> locationPublisher;
-    private Disposable locationDisposable;
 
     ClientHelper(MapsActivityMVP.Presenter presenter) {
         this.presenter = presenter;
-        this.locationPublisher = PublishSubject.create();
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        locationPublisher.onNext(location);
+        presenter.setLatestLocation(location);
+        if (IS_EMERGENCY) {
+            presenter.setEmergencyLocation(location);
+        }
     }
 
     @Override
@@ -60,20 +56,15 @@ class ClientHelper implements MapsActivityMVP.Client, LocationListener {
     @Override
     public void requestLocationUpdates() {
         LocationRequest locationRequest = buildLocationRequest();
-        if (checkPermission()) {
+        if (checkPermission() && client.isConnected()) {
             FusedLocationApi.requestLocationUpdates(client, locationRequest, ClientHelper.this);
         }
     }
 
     @Override
-    public void subscribeToLocationUpdates() {
-        locationDisposable = locationPublisher.subscribe(locationConsumer);
-    }
-
-    @Override
-    public void unsubscribeToLocationUpdates() {
-        if (locationDisposable != null){
-            locationDisposable.dispose();
+    public void removeLocationUpdates() {
+        if (client.isConnected()) {
+            FusedLocationApi.removeLocationUpdates(client, this);
         }
     }
 
@@ -89,14 +80,4 @@ class ClientHelper implements MapsActivityMVP.Client, LocationListener {
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
     }
-
-    private Consumer<Location> locationConsumer = new Consumer<Location>() {
-        @Override
-        public void accept(Location location) throws Exception {
-            presenter.setLatestLocation(location);
-            if (IS_EMERGENCY) {
-                presenter.setEmergencyLocation(location);
-            }
-        }
-    };
 }

@@ -9,7 +9,7 @@
     android:clickable="true"
     tools:openDrawer="start">
 
-    <FrameLayout
+    <android.support.design.widget.CoordinatorLayout
         android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -62,11 +62,12 @@
             android:layout_height="75dp"
             app:backgroundTint="@color/colorPrimary"
             android:layout_gravity="bottom|end"
-            android:src="@drawable/chat_word"
+            android:src="@drawable/ic_chat"
             android:layout_margin="20dp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:rippleColor="@color/colorPrimaryDark"/>
 
-    </FrameLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 
         <android.support.design.widget.NavigationView
@@ -108,14 +109,6 @@
 
                     <com.campuswatch.ascres_android.views.SamuelsMediumTextView
                         android:id="@+id/user_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textAlignment="center"
-                        android:textSize="17sp"/>
-
-                    <com.campuswatch.ascres_android.views.SamuelsMediumTextView
-                        android:id="@+id/user_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"

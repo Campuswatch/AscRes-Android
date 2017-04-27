@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
-import com.campuswatch.ascres_android.UserRepository;
+import com.campuswatch.ascres_android.root.UserRepository;
 import com.campuswatch.ascres_android.models.Alert;
 import com.campuswatch.ascres_android.models.Report;
 import com.campuswatch.ascres_android.models.User;
@@ -35,6 +35,7 @@ class MapsPresenter implements
     private MapsActivityMVP.View view;
     private UserRepository repo;
     private Location location;
+    private Snackbar dispatchSnackbar;
 
     MapsPresenter(MapsActivityMVP.Model model, UserRepository repo) {
         this.model = model;
@@ -60,6 +61,28 @@ class MapsPresenter implements
     }
 
     @Override
+    public void setPhoneUpdate(String phone) {
+        User user = repo.getUser();
+        user.setPhone(phone);
+        repo.setUser(user);
+        view.setUserDrawer(user);
+    }
+
+    @SuppressWarnings("VisibleForTests")
+    @Override
+    public void setImageUpdate(Uri image) {
+        User user = repo.getUser();
+        model.getImageRef().child(user.getUid()).child(user.getUid())
+                .putFile(image).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                user.setImage(task.getResult().getDownloadUrl().toString());
+                repo.setUser(user);
+                view.setUserDrawer(user);
+            } else view.makeToast("Error uploading image", Toast.LENGTH_SHORT);
+        });
+    }
+
+    @Override
     public void startAlerts() {
         ALERT_ID = UUID.randomUUID().toString();
 
@@ -76,8 +99,7 @@ class MapsPresenter implements
                     }
 
                     IS_EMERGENCY = true;
-                    view.showChatFab();
-                    view.hideHelpButton();
+                    view.showAlertUI(true);
 
                     model.getAlertReference().child(ALERT_ID).child("emergency")
                             .addValueEventListener(emergencyListener);
@@ -105,22 +127,6 @@ class MapsPresenter implements
         }
     }
 
-    @SuppressWarnings("VisibleForTests")
-    @Override
-    public void setUserUpdate(String name, String phone, String email, Uri image) {
-        final User[] user = {null};
-        model.getImageRef().child(repo.getUser().getUid()).child(repo.getUser().getUid())
-                .putFile(image).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                user[0] = updateInfo(name, phone, email, task.getResult().getDownloadUrl());
-            } else {
-                user[0] = updateInfo(name, phone, email, image);
-            }
-            model.saveUserFirebase(user[0]);
-            view.setUserDrawer(user[0]);
-        });
-    }
-
     @Override
     public Location getLocation() {
         return location;
@@ -138,17 +144,7 @@ class MapsPresenter implements
 
     private void onFirstLocationUpdate(Location location) {
         view.setMapLocation(location);
-        view.showHelpButton();
-    }
-
-    private User updateInfo(String name, String phone, String email, Uri image) {
-        User user = repo.getUser();
-        user.setName(name);
-        user.setPhone(phone);
-        user.setEmail(email);
-        user.setImage(image.toString());
-        repo.setUser(user);
-        return user;
+        view.showAlertUI(false);
     }
 
     private ValueEventListener reportEventListener = new ValueEventListener() {
@@ -181,15 +177,14 @@ class MapsPresenter implements
                 model.getAlertReference().child(ALERT_ID).child("emergency")
                         .removeEventListener(this);
 
-                model.getAlertReference().child(ALERT_ID).child("dispatched")
-                        .removeEventListener(dispatchedListener);
+                if (dispatchSnackbar != null && dispatchSnackbar.isShown()) {
+                    dispatchSnackbar.dismiss();
+                }
 
                 IS_EMERGENCY = false;
                 ALERT_ID = null;
 
-                view.showHelpButton();
-                view.setHelpButton(false);
-                view.hideChatFab();
+                view.showAlertUI(false);
 
             }
         }
@@ -204,7 +199,7 @@ class MapsPresenter implements
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.getValue(Boolean.class)) {
-                view.makeSnackbar("Help is on the way", Snackbar.LENGTH_LONG);
+                dispatchSnackbar = view.makeSnackbar("Help is on the way", Snackbar.LENGTH_INDEFINITE);
 
                 model.getAlertReference().child(ALERT_ID).child("dispatched")
                         .removeEventListener(this);
