@@ -63,6 +63,7 @@ public class TutorialActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         startActivity(new Intent(TutorialActivity.this, MapsActivity.class));
+        finish();
     }
 
     private class TutorialAdapter extends SmartFragmentStatePagerAdapter {

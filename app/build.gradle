@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'ascresandroid'
+            keyPassword 'cw2016'
+            storeFile file('/Users/samwyz/Dev/tools/campusWatch.jks')
+            storePassword 'cw2016'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -16,18 +24,16 @@ android {
             enabled true
         }
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
-
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
-
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
@@ -40,7 +46,7 @@ ext {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "415953626895-ehguicafjfhu79ihqe2q2ff2eu67h6ls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campuswatch.ascres_android",
+            "certificate_hash": "816a703762913badda0dc80f1df5335188b5d9fa"
+          }
+        },
+        {
           "client_id": "415953626895-3k8siht7i3b6s60hls8c1cdj65192sjv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

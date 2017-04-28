@@ -87,6 +87,10 @@ public class UserPhoneFragment extends Fragment implements View.OnClickListener 
         if (TextUtils.isEmpty(phone)) {
             phoneField.setError("Required");
             valid = false;
+        } else if (phoneField.getText().toString().length() < 10 ||
+                phoneField.getText().toString().length() > 10) {
+            phoneField.setError("Must be 10 digit phone number");
+            valid = false;
         } else if (!android.util.Patterns.PHONE.matcher(phone).matches()) {
             phoneField.setError("Invalid phone number");
             valid = false;
